@@ -758,9 +758,6 @@ function retornarGaleAnterior() {
 
 function retornarValorGale() {
     if (fazerPosLoss()) {
-        console.info('terminal: ' + JSON.stringify(terminal[gatilhoConfirmado]));
-        console.info('contagem posloss: ' + terminal[gatilhoConfirmado].contagemPosLoss);
-        console.info('gale por posLoss: ' + terminal[gatilhoConfirmado].galesPorPosLoss[terminal[gatilhoConfirmado].contagemPosLoss]);
         return parseInt(terminal[gatilhoConfirmado].galesPorPosLoss[terminal[gatilhoConfirmado].contagemPosLoss]);
     }
 
