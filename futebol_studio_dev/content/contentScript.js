@@ -758,7 +758,10 @@ function retornarGaleAnterior() {
 
 function retornarValorGale() {
     if (fazerPosLoss()) {
-        return parseInt(terminal[gatilhoConfirmado].galesPorPosLoss[terminal[gatilhoConfirmado].contagemPosLoss - 1]);
+        console.info('terminal: ' + JSON.stringify(terminal[gatilhoConfirmado]));
+        console.info('contagem posloss: ' + terminal[gatilhoConfirmado].contagemPosLoss);
+        console.info('gale por posLoss: ' + terminal[gatilhoConfirmado].galesPorPosLoss[terminal[gatilhoConfirmado].contagemPosLoss]);
+        return parseInt(terminal[gatilhoConfirmado].galesPorPosLoss[terminal[gatilhoConfirmado].contagemPosLoss]);
     }
 
     return terminal[gatilhoConfirmado].contagemCiclo > 0 ? parseInt(terminal[gatilhoConfirmado].galesPorCiclo[terminal[gatilhoConfirmado].contagemCiclo - 1]) : parseInt(terminal[gatilhoConfirmado].gale);
@@ -1426,7 +1429,6 @@ function mensagemTelegramGale(resultado, galeAtual, cicloAtual) {
 
 function mensagemTelegramGreen() {
     return (
-        `✅✅✅✅✅✅✅✅✅✅✅✅ *GREEN*: \n` +
         `⚡️ *GATILHO*: ${JSON.stringify(terminal[gatilhoConfirmado].gatilho)}\n` +
         `🎯 *APOSTA*: ${JSON.stringify(terminal[gatilhoConfirmado].aposta)}\n` +
         `💰 *FICHA*: ${valorFicha(terminal[gatilhoConfirmado].ficha)}\n` +
@@ -1440,14 +1442,12 @@ function mensagemTelegramGreen() {
         `📅 *EVENTOS*: ${qtdEventos}\n\n` +
         `🏠 *% CASA*: ${porcentagemCasaFS()}%\n` +
         `🛫 *% VISITANTE*: ${porcentagemVisitanteFS()}%\n` +
-        `⚖️ *% EMPATE*: ${porcentagemEmpateFS()}%\n\n` +
-        `🏦 *VALOR DE BANCA*: R$ ${valorBanca()}\n`
+        `⚖️ *% EMPATE*: ${porcentagemEmpateFS()}%\n\n`
     );
 }
 
 function mensagemTelegramDadosRed() {
     return (
-        `❌❌❌❌❌❌❌❌❌❌❌❌ *RED*: \n` +
         `⚡️ *GATILHO*: ${JSON.stringify(terminal[gatilhoConfirmado].gatilho)}\n` +
         `🎯 *APOSTA*: ${JSON.stringify(terminal[gatilhoConfirmado].aposta)}\n` +
         `💰 *FICHA*: ${valorFicha(terminal[gatilhoConfirmado].ficha)}\n` +
@@ -1461,8 +1461,7 @@ function mensagemTelegramDadosRed() {
         `📅 *EVENTOS*: ${qtdEventos}\n\n` +
         `🏠 *% CASA*: ${porcentagemCasaFS()}%\n` +
         `🛫 *% VISITANTE*: ${porcentagemVisitanteFS()}%\n` +
-        `⚖️ *% EMPATE*: ${porcentagemEmpateFS()}%\n\n` +
-        `🏦 *VALOR DE BANCA*: R$ ${valorBanca()}\n`
+        `⚖️ *% EMPATE*: ${porcentagemEmpateFS()}%\n\n`
     );
 }
 
@@ -1476,22 +1475,22 @@ function fazerSurf() {
             fazerGaleVirtual = true;
             if (fazerPosLoss()) {
                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
-                    enviarMsgTelegram(`POS LOSS VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### POS LOSS VIRTUAL ### ${terminal[gatilhoConfirmado].contagemPosLoss + 1}\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `POS LOSS VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 } else {
-                    enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 }
             } else {
                 liberadoApostar = false;
                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
-                    enviarMsgTelegram(`APOSTANDO VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### APOSTANDO VIRTUAL ###\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `APOSTANDO VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 } else {
-                    enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 }
@@ -1499,11 +1498,11 @@ function fazerSurf() {
         } else {
             if (fazerPosLoss()) {
                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
-                    enviarMsgTelegram(`POS LOSS \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `POS LOSS ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 } else {
-                    enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 }
@@ -1511,11 +1510,11 @@ function fazerSurf() {
                 liberadoApostar = true;
                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                     ociosidade = 0;
-                    enviarMsgTelegram(`APOSTANDO \n${mensagemTelegramDadosGerais()}\nCICLO ${terminal[gatilhoConfirmado].contagemCiclo}`);
+                    enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramDadosGerais()}\nCICLO ${terminal[gatilhoConfirmado].contagemCiclo}`);
                     document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS / CICLO ${terminal[gatilhoConfirmado].contagemCiclo}`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 } else {
-                    enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramDadosGerais()}`);
+                    enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramDadosGerais()}`);
                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 }
@@ -1547,22 +1546,22 @@ async function analisaFutebolStudio() {
                 fazerGaleVirtual = true;
                 if (fazerPosLoss()) {
                     if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
-                        enviarMsgTelegram(`POS LOSS VIRTUAL\n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### POS LOSS VIRTUAL ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `POS LOSS VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     } else {
-                        enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     }
                 } else {
                     liberadoApostar = false;
                     if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
-                        enviarMsgTelegram(`APOSTANDO VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### APOSTANDO VIRTUAL ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `APOSTANDO VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     } else {
-                        enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     }
@@ -1570,11 +1569,11 @@ async function analisaFutebolStudio() {
             } else {
                 if (fazerPosLoss()) {
                     if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
-                        enviarMsgTelegram(`POS LOSS \n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `POS LOSS ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     } else {
-                        enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     }
@@ -1582,11 +1581,11 @@ async function analisaFutebolStudio() {
                     liberadoApostar = true;
                     if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                         ociosidade = 0;
-                        enviarMsgTelegram(`APOSTANDO ${apostaGatilhoEncontrado}\n${terminal[gatilhoConfirmado].contagemCiclo > 0 ? `CICLO ${terminal[gatilhoConfirmado].contagemCiclo}` : ''}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
+                        enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} ${terminal[gatilhoConfirmado].contagemCiclo > 0 ? `CICLO ${terminal[gatilhoConfirmado].contagemCiclo}` : ''} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     } else {
-                        enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramDadosGerais()}`);
+                        enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramDadosGerais()}`);
                         document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA ${apostaGatilhoEncontrado} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                     }
@@ -1606,13 +1605,13 @@ async function analisaFutebolStudio() {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosGain = 0;
                     terminal[gatilhoConfirmado].contagemPosLoss = 0;
-                    enviarMsgTelegram(`${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN FAKE\n\n${mensagemTelegramGreen()}`);
                     atualizarHistorico(`🟩GREEN FAKE🟩 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN FAKE';
                 } else {
                     fazerPosGainGreen();
-                    enviarMsgTelegram(`${mensagemTelegramGreen()}`);
-                    atualizarHistorico(`🟩GREEN🟩 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN VIRTUAL \n\n${mensagemTelegramGreen()}`);
+                    atualizarHistorico(`🟩GREEN VIRTUAL🟩 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN VIRTUAL';
                 }
 
@@ -1630,7 +1629,7 @@ async function analisaFutebolStudio() {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosGain = 0;
                     terminal[gatilhoConfirmado].contagemPosLoss = 0;
-                    enviarMsgTelegram(`${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN FAKE\n\n${mensagemTelegramGreen()}`);
                     atualizarHistorico(`🟩GREEN FAKE🟩 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN FAKE';
                 } else {
@@ -1656,7 +1655,7 @@ async function analisaFutebolStudio() {
                     }
 
                     fazerPosGainGreen();
-                    enviarMsgTelegram(`${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN \n\n${mensagemTelegramGreen()}`);
                     atualizarHistorico(`🟩GREEN🟩 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN';
                 }
@@ -1690,11 +1689,11 @@ async function analisaFutebolStudio() {
                                 rodada++;
                                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                     document.getElementById(elementos.e10).textContent = `POS LOSS ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`POS LOSS \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 } else {
                                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`SIMULANDO \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### SIMULANDO ### \n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 }
 
@@ -1705,11 +1704,11 @@ async function analisaFutebolStudio() {
                                 rodada++;
                                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                     document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`APOSTANDO \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 } else {
                                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`SIMULANDO \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### SIMULANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 }
                             }
@@ -1721,11 +1720,11 @@ async function analisaFutebolStudio() {
                                 rodada++;
                                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                     document.getElementById(elementos.e10).textContent = `POS LOSS VIRTUAL ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`POS LOSS \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 } else {
                                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 }
 
@@ -1736,11 +1735,11 @@ async function analisaFutebolStudio() {
                                 rodada++;
                                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                     document.getElementById(elementos.e10).textContent = `APOSTANDO VIRTUAL ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`APOSTANDO VIRTUAL \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### APOSTANDO VIRTUAL ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 } else {
                                     document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                    enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                    enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                                 }
                             }
@@ -1753,11 +1752,11 @@ async function analisaFutebolStudio() {
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                 document.getElementById(elementos.e10).textContent = `POS LOSS ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`POS LOSS \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             } else {
                                 document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             }
 
@@ -1768,11 +1767,11 @@ async function analisaFutebolStudio() {
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                 document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`APOSTANDO \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             } else {
                                 document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE CICLO ${terminal[gatilhoConfirmado].contagemCiclo} ${posicaoGaleAtual()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             }
                         }
@@ -1788,11 +1787,11 @@ async function analisaFutebolStudio() {
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                 document.getElementById(elementos.e10).textContent = `POS LOSS ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`POS LOSS \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             } else {
                                 document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             }
 
@@ -1803,11 +1802,11 @@ async function analisaFutebolStudio() {
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                 document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`APOSTANDO \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             } else {
                                 document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`SIMULANDO APOSTA \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### SIMULANDO APOSTA ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             }
                         }
@@ -1819,11 +1818,11 @@ async function analisaFutebolStudio() {
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                 document.getElementById(elementos.e10).textContent = `POS LOSS VIRTUAL ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`POS LOSS \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             } else {
                                 document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             }
 
@@ -1834,11 +1833,11 @@ async function analisaFutebolStudio() {
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                                 document.getElementById(elementos.e10).textContent = `APOSTANDO VIRTUAL ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`APOSTANDO VIRTUAL \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### APOSTANDO VIRTUAL ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             } else {
                                 document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA VIRTUAL EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                                enviarMsgTelegram(`SIMULANDO APOSTA VIRTUAL \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                                enviarMsgTelegram(`### SIMULANDO APOSTA VIRTUAL ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                             }
                         }
@@ -1851,11 +1850,11 @@ async function analisaFutebolStudio() {
                         rodada++;
                         if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                             document.getElementById(elementos.e10).textContent = `POS LOSS ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                            enviarMsgTelegram(`POS LOSS \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                            enviarMsgTelegram(`### POS LOSS ${terminal[gatilhoConfirmado].contagemPosLoss + 1} ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                             document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                         } else {
                             document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                            enviarMsgTelegram(`SIMULANDO APOSTA EM \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                            enviarMsgTelegram(`### SIMULANDO APOSTA EM ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                             document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                         }
 
@@ -1866,11 +1865,11 @@ async function analisaFutebolStudio() {
                         rodada++;
                         if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
                             document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                            enviarMsgTelegram(`APOSTANDO \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                            enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                             document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                         } else {
                             document.getElementById(elementos.e10).textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE CICLO ${terminal[gatilhoConfirmado].contagemCiclo} ${posicaoGaleAtual()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                            enviarMsgTelegram(`SIMULANDO APOSTA EM \n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
+                            enviarMsgTelegram(`### SIMULANDO APOSTA EM \n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                             document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                         }
                     }
@@ -1880,11 +1879,11 @@ async function analisaFutebolStudio() {
             if (fazerGaleVirtual) {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosLoss++;
-                    enviarMsgTelegram(`${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED FAKE\n\n${mensagemTelegramDadosRed()}`);
                     atualizarHistorico(`🟥RED FAKE🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED FAKE';
                 } else {
-                    enviarMsgTelegram(`${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED VIRTUAL\n\n${mensagemTelegramDadosRed()}`);
                     atualizarHistorico(`🟥RED VIRTUAL🟥 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED VIRTUAL';
                     fazerPosGainRed();
@@ -1902,7 +1901,7 @@ async function analisaFutebolStudio() {
             } else {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosLoss++;
-                    enviarMsgTelegram(`${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED FAKE\n\n${mensagemTelegramDadosRed()}`);
                     atualizarHistorico(`🟥RED FAKE🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED FAKE';
                 } else {
@@ -1913,7 +1912,7 @@ async function analisaFutebolStudio() {
                     }
                     contagemLoss++;
                     definirStopDePerca();
-                    enviarMsgTelegram(`${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED \n\n${mensagemTelegramDadosRed()}`);
                     atualizarHistorico(`🟥RED🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED';
                     fazerPosGainRed();
