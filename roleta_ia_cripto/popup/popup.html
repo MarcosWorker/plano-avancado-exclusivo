@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extension Login</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <div class="header">
+    <img src="../assets/icon.png" alt="Header da extensão" />
+  </div>
+  <div id="login-screen" class="visible">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Senha" />
+    <button id="login-button">Entrar</button>
+    <p id="error-message" class="hidden">Erro: Verifique suas credenciais.</p>
+  </div>
+
+  <div id="config-screen" class="hidden">
+    <button id="reset-storage-button" class="reset-btn">Resetar Contadores</button>
+    <div id="roletas-section">
+      <h3>Roletas</h3>
+      <div id="roletas-container"></div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="modo-solo" />
+        <label for="modo-solo">Modo Solo</label>
+      </div>
+      </br>
+      <div id="roleta-solo-section">
+        <select id="roleta-solo-select">
+          <option value="">-- Selecione uma Roleta --</option>
+        </select>
+      </div>
+      <div class="checkbox-item">
+        <input type="checkbox" id="modo-carrossel" />
+        <label for="modo-carrossel">Modo Carrossel</label>
+      </div>
+    </div>
+
+    <div id="legendas-section">
+      <h3>Legendas</h3>
+      <div class="legend-inputs">
+        <input type="text" id="legenda-input" placeholder="Legenda (máx. 3 caracteres)" maxlength="3" />
+        <input type="text" id="numeros-input" placeholder="Números (ex: 2 4 6 8)" />
+        <button id="add-legenda-button">Adicionar Legenda</button>
+      </div>
+      <ul id="legendas-list"></ul>
+    </div>
+
+    <div id="estrategia-section">
+      <h3>Estratégia</h3>
+
+      <!-- Adicionar Grupos -->
+      <div id="grupo-section">
+        <input type="text" id="grupo-nome" placeholder="Digite o nome do grupo" />
+        <button id="add-grupo-button">Adicionar Grupo</button>
+        <ul id="grupo-list"></ul>
+      </div>
+
+      <!-- Configuração de Jogadas no Grupo -->
+      <div id="config-jogada-section" class="hidden">
+        <h4 id="grupo-atual"></h4>
+        <label for="gatilho">Gatilho:</label>
+        <input type="text" id="gatilho" placeholder="Digite legendas separadas por espaço" />
+
+        <label for="aposta">Aposta:</label>
+        <input type="text" id="aposta" placeholder="Digite números separados por espaço" />
+
+        <label for="gale">Gale:</label>
+        <input type="number" id="gale" min="0" max="10" placeholder="0-10" />
+
+        <div id="gale-config" class="hidden">
+          <h5>Multiplicadores de Gale:</h5>
+          <div id="gale-fields"></div>
+        </div>
+
+        <label for="ciclo">Quantidade de Ciclos:</label>
+        <input type="number" id="ciclo" min="0" max="10" placeholder="0-10" />
+
+        <div id="ciclo-container">
+          <!-- Aqui serão adicionados os ciclos dinamicamente -->
+        </div>
+
+        <label for="lossVirtual">Loss Virtual:</label>
+        <input type="number" id="lossVirtual" min="0" max="10" placeholder="0-10" />
+
+        <label for="posGreen">Pos Green:</label>
+        <input type="number" id="posGreen" min="0" max="10" placeholder="0-10" />
+
+        <label for="pauseWin">Pause Win:</label>
+        <input type="number" id="pauseWin" min="0" max="10" placeholder="0-10" />
+
+        <label for="assertividadeMax">Assertividade Máx (%):</label>
+        <input type="number" id="assertividadeMax" min="0" max="100" placeholder="0-100" />
+
+        <label for="assertividadeMin">Assertividade Min (%):</label>
+        <input type="number" id="assertividadeMin" min="0" max="100" placeholder="0-100" />
+
+        <label for="eventosMax">Eventos Máx:</label>
+        <input type="number" id="eventosMax" min="0" max="500" placeholder="0-500" />
+
+        <label for="eventosMin">Eventos Min:</label>
+        <input type="number" id="eventosMin" min="0" max="500" placeholder="0-500" />
+
+        <label for="historico">Histórico:</label>
+        <input type="number" id="historico" min="0" max="500" placeholder="0-500" />
+
+        <label for="analise">Análise:</label>
+        <input type="text" id="analise" placeholder="Digite a análise" />
+
+        <label for="ficha">Ficha:</label>
+        <select id="ficha">
+          <option value="0">Modo Simulador</option>
+          <option value="1">Apostar com ficha $ 0,10</option>
+          <option value="2">Apostar com ficha $ 0,20</option>
+          <option value="3">Apostar com ficha $ 0,50</option>
+          <option value="4">Apostar com ficha $ 1,00</option>
+          <option value="5">Apostar com ficha $ 2,50</option>
+          <option value="6">Apostar com ficha $ 5,00</option>
+          <option value="7">Apostar com ficha $ 10,00</option>
+          <option value="8">Apostar com ficha $ 15,00</option>
+          <option value="9">Apostar com ficha $ 20,00</option>
+          <option value="10">Apostar com ficha $ 25,00</option>
+          <option value="11">Apostar com ficha $ 50,00</option>
+          <option value="12">Apostar com ficha $ 100,00</option>
+          <option value="13">Apostar com ficha $ 125,00</option>
+          <option value="14">Apostar com ficha $ 500,00</option>
+          <option value="15">Apostar com ficha $ 2000,00</option>
+          <option value="16">Apostar com ficha $ 2500,00</option>
+          <option value="17">Apostar com ficha $ 5000,00</option>
+          <option value="18">Apostar com ficha $ 25000,00</option>
+        </select>
+
+        <button id="add-jogada-button">Adicionar Jogada ao Grupo</button>
+      </div>
+      <ul id="estrategia-list"></ul>
+    </div>
+
+    <!-- Seção Congruencia -->
+    <h3>Congruência</h3>
+    <label>
+      <input type="checkbox" id="modo-congruencia" />
+      Modo Congruência
+    </label>
+
+    <label for="num-gatilhos">Número de gatilhos:</label>
+    <input type="number" id="num-gatilhos" min="0" />
+
+    <label for="num-fichas">Número de Fichas:</label>
+    <input type="number" id="num-fichas" min="0" />
+
+    <label for="congruencia-ficha">Número de Fichas:</label>
+    <select id="congruencia-ficha">
+      <option value="0">Modo Simulador</option>
+          <option value="1">Apostar com ficha $ 0,10</option>
+          <option value="2">Apostar com ficha $ 0,20</option>
+          <option value="3">Apostar com ficha $ 0,50</option>
+          <option value="4">Apostar com ficha $ 1,00</option>
+          <option value="5">Apostar com ficha $ 2,50</option>
+          <option value="6">Apostar com ficha $ 5,00</option>
+          <option value="7">Apostar com ficha $ 10,00</option>
+          <option value="8">Apostar com ficha $ 15,00</option>
+          <option value="9">Apostar com ficha $ 20,00</option>
+          <option value="10">Apostar com ficha $ 25,00</option>
+          <option value="11">Apostar com ficha $ 50,00</option>
+          <option value="12">Apostar com ficha $ 100,00</option>
+          <option value="13">Apostar com ficha $ 125,00</option>
+          <option value="14">Apostar com ficha $ 500,00</option>
+          <option value="15">Apostar com ficha $ 2000,00</option>
+          <option value="16">Apostar com ficha $ 2500,00</option>
+          <option value="17">Apostar com ficha $ 5000,00</option>
+          <option value="18">Apostar com ficha $ 25000,00</option>
+    </select>
+
+    <label for="pos-loss">Pos Loss:</label>
+    <input type="number" id="pos-loss" min="0" />
+
+    <label for="pos-green">Pos Green:</label>
+    <input type="number" id="pos-green" min="0" />
+
+    <label for="pause-win">Pause Win:</label>
+    <input type="number" id="pause-win" min="0" />
+
+    <!-- Campos de Assertividade e Histórico -->
+    <label for="assertividade-max">Assertividade Máx (%):</label>
+    <input type="number" id="assertividade-max" min="0" max="100" />
+
+    <label for="assertividade-min">Assertividade Min (%):</label>
+    <input type="number" id="assertividade-min" min="0" max="100" />
+
+    <label for="eventos-max">Eventos Máx:</label>
+    <input type="number" id="eventos-max" min="0" max="500" />
+
+    <label for="eventos-min">Eventos Min:</label>
+    <input type="number" id="eventos-min" min="0" max="500" />
+
+    <label for="historico">Histórico:</label>
+    <input type="number" id="congruencia-historico" min="0" max="500" />
+
+    <!-- Gale -->
+    <label for="congruencia-gale">Quantidade de Gales:</label>
+    <input type="number" id="congruencia-gale" min="0" />
+    <div id="congruencia-gale-container"></div>
+
+    <!-- Ciclo -->
+    <label for="congruencia-ciclo">Quantidade de Ciclos:</label>
+    <input type="number" id="congruencia-ciclo" min="0" />
+    <div id="congruencia-ciclo-container"></div>
+
+    <div id="quentes-frios-section">
+      <h3>Quentes/Frios</h3>
+
+      <!-- Números Quentes -->
+      <h4>Números Quentes</h4>
+      <div class="checkbox-item">
+        <input type="checkbox" id="numeros-quentes" />
+        <label for="numeros-quentes">Ativar Números Quentes</label>
+      </div>
+      </br>
+      <label for="qtd-aposta-num-quentes">Quantidade de Aposta:</label>
+      <input type="number" id="qtd-aposta-num-quentes" min="0" max="36" />
+      <label for="gale-num-quentes">Quantidade de Gales:</label>
+      <input type="number" id="gale-num-quentes" min="0" max="10" placeholder="0-10" />
+
+      <div id="gale-num-quentes-container">
+        <!-- Aqui serão adicionados os campos de multiplicadores de Gale dinamicamente -->
+      </div>
+      <label for="qtd-vizinhos-num-quentes">Quantidade de Vizinhos:</label>
+      <input type="number" id="qtd-vizinhos-num-quentes" min="0" max="9" />
+      <label for="qtd-historico-num-quentes">Histórico:</label>
+      <input type="number" id="qtd-historico-num-quentes" min="0" max="500" />
+      <label for="qtd-eventos-num-quentes">Eventos:</label>
+      <input type="number" id="qtd-eventos-num-quentes" min="0" max="500" />
+
+      <!-- Números Frios -->
+      <h4>Números Frios</h4>
+      <div class="checkbox-item">
+        <input type="checkbox" id="numeros-frios" />
+        <label for="numeros-frios">Ativar Números Frios</label>
+      </div>
+      </br>
+      <label for="qtd-aposta-num-frios">Quantidade de Aposta:</label>
+      <input type="number" id="qtd-aposta-num-frios" min="0" max="36" />
+      <label for="gale-num-frios">Quantidade de Gales:</label>
+      <input type="number" id="gale-num-frios" min="0" max="10" placeholder="0-10" />
+
+      <div id="gale-num-frios-container">
+        <!-- Aqui serão adicionados os campos de multiplicadores de Gale dinamicamente -->
+      </div>
+      <label for="qtd-vizinhos-num-frios">Quantidade de Vizinhos:</label>
+      <input type="number" id="qtd-vizinhos-num-frios" min="0" max="9" />
+      <label for="qtd-historico-num-frios">Histórico:</label>
+      <input type="number" id="qtd-historico-num-frios" min="0" max="500" />
+      <label for="qtd-eventos-num-frios">Eventos:</label>
+      <input type="number" id="qtd-eventos-num-frios" min="0" max="500" />
+
+      <!-- Terminais Quentes -->
+      <h4>Terminais Quentes</h4>
+      <div class="checkbox-item">
+        <input type="checkbox" id="terminais-quentes" />
+        <label for="terminais-quentes">Ativar Terminais Quentes</label>
+      </div>
+      </br>
+      <label for="qtd-aposta-term-quentes">Quantidade de Aposta:</label>
+      <input type="number" id="qtd-aposta-term-quentes" min="0" max="36" />
+      <label for="gale-term-quentes">Quantidade de Gales:</label>
+      <input type="number" id="gale-term-quentes" min="0" max="10" placeholder="0-10" />
+
+      <div id="gale-term-quentes-container">
+        <!-- Aqui serão adicionados os campos de multiplicadores de Gale dinamicamente -->
+      </div>
+      <label for="qtd-vizinhos-term-quentes">Quantidade de Vizinhos:</label>
+      <input type="number" id="qtd-vizinhos-term-quentes" min="0" max="9" />
+      <label for="qtd-historico-term-quentes">Histórico:</label>
+      <input type="number" id="qtd-historico-term-quentes" min="0" max="500" />
+      <label for="qtd-eventos-term-quentes">Eventos:</label>
+      <input type="number" id="qtd-eventos-term-quentes" min="0" max="500" />
+
+      <!-- Terminais Frios -->
+      <h4>Terminais Frios</h4>
+      <div class="checkbox-item">
+        <input type="checkbox" id="terminais-frios" />
+        <label for="terminais-frios">Ativar Terminais Frios</label>
+      </div>
+      </br>
+      <label for="qtd-aposta-term-frios">Quantidade de Aposta:</label>
+      <input type="number" id="qtd-aposta-term-frios" min="0" max="36" />
+      <label for="gale-term-frios">Quantidade de Gales:</label>
+      <input type="number" id="gale-term-frios" min="0" max="10" placeholder="0-10" />
+
+      <div id="gale-term-frios-container">
+        <!-- Aqui serão adicionados os campos de multiplicadores de Gale dinamicamente -->
+      </div>
+      <label for="qtd-vizinhos-term-frios">Quantidade de Vizinhos:</label>
+      <input type="number" id="qtd-vizinhos-term-frios" min="0" max="9" />
+      <label for="qtd-historico-term-frios">Histórico:</label>
+      <input type="number" id="qtd-historico-term-frios" min="0" max="500" />
+      <label for="qtd-eventos-term-frios">Eventos:</label>
+      <input type="number" id="qtd-eventos-term-frios" min="0" max="500" />
+
+      <!-- Configuração de Ficha -->
+      <label for="ficha-quentes-frios">Ficha:</label>
+      <select id="ficha-quentes-frios">
+        <option value="0">Modo Simulador</option>
+          <option value="1">Apostar com ficha $ 0,10</option>
+          <option value="2">Apostar com ficha $ 0,20</option>
+          <option value="3">Apostar com ficha $ 0,50</option>
+          <option value="4">Apostar com ficha $ 1,00</option>
+          <option value="5">Apostar com ficha $ 2,50</option>
+          <option value="6">Apostar com ficha $ 5,00</option>
+          <option value="7">Apostar com ficha $ 10,00</option>
+          <option value="8">Apostar com ficha $ 15,00</option>
+          <option value="9">Apostar com ficha $ 20,00</option>
+          <option value="10">Apostar com ficha $ 25,00</option>
+          <option value="11">Apostar com ficha $ 50,00</option>
+          <option value="12">Apostar com ficha $ 100,00</option>
+          <option value="13">Apostar com ficha $ 125,00</option>
+          <option value="14">Apostar com ficha $ 500,00</option>
+          <option value="15">Apostar com ficha $ 2000,00</option>
+          <option value="16">Apostar com ficha $ 2500,00</option>
+          <option value="17">Apostar com ficha $ 5000,00</option>
+          <option value="18">Apostar com ficha $ 25000,00</option>
+      </select>
+    </div>
+
+    <!-- Seção Color Race -->
+    <h3>Color Race</h3>
+    <label>
+      <input type="checkbox" id="color-race" />
+      Ativar Color Race
+    </label>
+    <label for="historico-color">Histórico:</label>
+    <input type="number" id="historico-color" min="0" max="500" />
+
+    <!-- Seção Timer -->
+    <h3>Timer</h3>
+    <label for="tempo-ocioso">Tempo Ocioso (minutos):</label>
+    <input type="number" id="tempo-ocioso" min="0" />
+
+    <label for="num-greens">Número de Greens:</label>
+    <input type="number" id="num-greens" min="0" />
+
+    <!-- Seção Cobrir o Zero -->
+    <h3>Cobrir o Zero</h3>
+    <label>
+      <input type="checkbox" id="cobrir-zero" />
+      Cobrir o Zero
+    </label>
+
+    <label for="ficha-zero">Ficha:</label>
+    <select id="ficha-zero">
+      <option value="0">Modo Simulador</option>
+          <option value="1">Apostar com ficha $ 0,10</option>
+          <option value="2">Apostar com ficha $ 0,20</option>
+          <option value="3">Apostar com ficha $ 0,50</option>
+          <option value="4">Apostar com ficha $ 1,00</option>
+          <option value="5">Apostar com ficha $ 2,50</option>
+          <option value="6">Apostar com ficha $ 5,00</option>
+          <option value="7">Apostar com ficha $ 10,00</option>
+          <option value="8">Apostar com ficha $ 15,00</option>
+          <option value="9">Apostar com ficha $ 20,00</option>
+          <option value="10">Apostar com ficha $ 25,00</option>
+          <option value="11">Apostar com ficha $ 50,00</option>
+          <option value="12">Apostar com ficha $ 100,00</option>
+          <option value="13">Apostar com ficha $ 125,00</option>
+          <option value="14">Apostar com ficha $ 500,00</option>
+          <option value="15">Apostar com ficha $ 2000,00</option>
+          <option value="16">Apostar com ficha $ 2500,00</option>
+          <option value="17">Apostar com ficha $ 5000,00</option>
+          <option value="18">Apostar com ficha $ 25000,00</option>
+    </select>
+
+    <!-- Seção Surf -->
+    <h3>Surf</h3>
+    <label>
+      <input type="checkbox" id="modo-surf" />
+      Modo Surf
+    </label>
+
+    <!-- Seção IA -->
+    <h3>Modo IA</h3>
+    <label>
+      <input type="checkbox" id="modo-ia" />
+      Modo IA
+    </label>
+
+    <label for="perfil-modo-ia">Perfil:</label>
+      <select id="perfil-modo-ia">
+        <option value="0">Conservador</option>
+        <option value="1">Agressivo</option>
+      </select>
+
+    <label for="ficha-modo-ia">Ficha:</label>
+    <select id="ficha-modo-ia">
+      <option value="0">Modo Simulador</option>
+          <option value="1">Apostar com ficha $ 0,10</option>
+          <option value="2">Apostar com ficha $ 0,20</option>
+          <option value="3">Apostar com ficha $ 0,50</option>
+          <option value="4">Apostar com ficha $ 1,00</option>
+          <option value="5">Apostar com ficha $ 2,50</option>
+          <option value="6">Apostar com ficha $ 5,00</option>
+          <option value="7">Apostar com ficha $ 10,00</option>
+          <option value="8">Apostar com ficha $ 15,00</option>
+          <option value="9">Apostar com ficha $ 20,00</option>
+          <option value="10">Apostar com ficha $ 25,00</option>
+          <option value="11">Apostar com ficha $ 50,00</option>
+          <option value="12">Apostar com ficha $ 100,00</option>
+          <option value="13">Apostar com ficha $ 125,00</option>
+          <option value="14">Apostar com ficha $ 500,00</option>
+          <option value="15">Apostar com ficha $ 2000,00</option>
+          <option value="16">Apostar com ficha $ 2500,00</option>
+          <option value="17">Apostar com ficha $ 5000,00</option>
+          <option value="18">Apostar com ficha $ 25000,00</option>
+    </select>
+
+    <!-- Seção Stop-->
+    <h3>Stop</h3>
+    <label for="stop-win">Stop Win (R$):</label>
+    <input type="number" id="stop-win" min="0" />
+
+    <label for="stop-loss">Stop Loss (R$):</label>
+    <input type="number" id="stop-loss" min="0" />
+
+    <!-- Seção Telegram -->
+    <h3>Telegram</h3>
+    <label>
+      <input type="checkbox" id="monitorar-telegram" />
+      Monitorar com Telegram
+    </label>
+
+    <label for="token-telegram">Token Telegram:</label>
+    <input type="text" id="token-telegram" />
+
+    <label for="chat-id-telegram">Chat ID Telegram:</label>
+    <input type="text" id="chat-id-telegram" />
+
+    <button id="save-config-button">Salvar Configuração</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

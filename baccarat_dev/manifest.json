@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "BACCARAT EXCLUSIVE",
+  "description": "Automatize suas tarefas com o BACCARAT EXCLUSIVE! Aumente sua produtividade e libere seu tempo para o que realmente importa.",
+  "version": "4.0",
+  "permissions": ["activeTab", "storage", "scripting", "background"],
+  "host_permissions": ["https://autobotcasino.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "assets/icon.png",
+      "24": "assets/icon.png",
+      "32": "assets/icon.png"
+    },
+    "default_title": "BACCARAT EXCLUSIVE",
+    "default_popup": "popup/popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; script-src-elem 'self' https://apis.google.com; object-src 'self';"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://client.pragmaticplaylive.net/desktop/*"],
+      "all_frames": true,
+      "js": ["content/contentScript.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

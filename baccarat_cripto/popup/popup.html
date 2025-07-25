@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <title>AUTO BOT BACCARAT</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../popup/popup.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="container">
+        <div id="container2">
+
+            <form>
+                <img src="../assets/icon.png">
+
+                <button id="btnLimparDados" type="button">LIMPAR DADOS</button>
+
+                <label id="labelCasas">CASAS DE APOSTA</label>
+                <a id="btnEsportesdaSorte" href="https://m.esportesdasorte.com/ptb/bet/live?click_id=pjevqrtdnvrpkdyduzkamo&affid=329133&campaign_id=19702&source_id=brand&gad_source=1&gclid=CjwKCAiAjKu6BhAMEiwAx4UsAl_4JOK1negV04x91it3EgsnDYw5XY2ZNrd0PC_XwwVggLjeuNaL_RoC5ZsQAvD_BwE" class="botao"
+                    target="_blank">ESPORTES DA SORTE</a>
+                <a id="btnKto" href="https://www.kto.com/pt/" class="botao"
+                    target="_blank">KTO</a>
+                <a id="btnStake" href="https://stake.com/?c=SxsXzbPd" class="botao" target="_blank">STAKE</a>
+                <a id="btnSegurobet"
+                    href="https://www.segurobet.com/cassino/slots/all?provider=all&accounts=%2A&register=%2A"
+                    class="botao" target="_blank">SEGUROBET</a>
+                <a id="btnBetano"
+                    href="https://br.betano.com/?siteid=29568&gclid=EAIaIQobChMI0qaNy87dhQMVdIvCCB2N0Q1QEAAYASAAEgJemvD_BwE"
+                    class="botao" target="_blank">BETANO</a>
+                <a id="btnReals" href="https://m.realsbet.com/live-casino" class="botao" target="_blank">REALS BET</a>
+                <a id="btnSuperbet" href="https://superbet.com/pt-br/intro" class="botao"
+                    target="_blank">SUPERBET</a>
+
+                <label id="labelMesas">MESAS</label>
+                    <input type="text" id="input-text" placeholder="Digite o nome da mesa" />
+                </br>
+                    <button id="add-button">Adicionar</button>
+                </br>
+                <ul id="selected-list"></ul>
+                </br>
+                <span id="txtGainMesas"></span>
+                <input id="inputGainMesas" type="range" min="1" max="1000" step="1.0">
+
+                <label id="labelConfig1">CONFIGURAÇÃO</label>
+
+                <input type="text" id="gatilho" placeholder="Gatilho">
+                </br>
+                <input type="text" id="aposta" placeholder="Aposta">
+                </br>
+                <input type="number" id="gale" placeholder="Gale">
+                </br>
+                <input type="number" id="ciclo" placeholder="Ciclo">
+                </br>
+                <input type="text" id="posLoss" placeholder="Pos Loss">
+                </br>
+                <input type="text" id="posGreen" placeholder="Pos Green">
+                </br>
+                <input type="text" id="posGain" placeholder="Pos Gain">
+                </br>
+                <span id="txtFicha"></span>
+                <input id="inputFicha" type="range" min="0" max="20" step="1.0">
+                </br>
+                <span id="txtSoros"></span>
+                <input id="inputSoros" type="range" min="0" max="1" step="1.0">
+                </br>
+                <span id="txtCicloSequencial"></span>
+                <input id="inputCicloSequencial" type="range" min="0" max="1" step="1.0">
+                </br>
+                <button id="btnAdicionarGatilhos" type="button">ADICIONAR</button>
+
+                <ul id="listaGatilhos"></ul>
+                </br>
+                <span id="txtTimer"></span>
+                <input id="inputTimer" type="range" min="0" max="1440" step="1.0">
+                </br>
+                <span id="txtTimerGain"></span>
+                <input id="inputTimerGain" type="range" min="1" max="100" step="1.0">
+                </br>
+
+                <label id="labelConfig2">INTELIGÊNCIA ARTIFICIAL</label>
+
+                <span id="txtHistorico"></span>
+                <input id="inputHistorico" type="range" min="5" max="80" step="1.0">
+                <span id="txtIaMinimo"></span>
+                <input id="inputIaMinimo" type="range" min="0" max="99" step="1.0">
+                <span id="txtIaMaximo"></span>
+                <input id="inputIaMaximo" type="range" min="1" max="100" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig3">EVENTOS</label>
+
+                <span id="txtEventoMinimo"></span>
+                <input id="inputEventoMinimo" type="range" min="0" max="80" step="1.0">
+                <span id="txtEventoMaximo"></span>
+                <input id="inputEventoMaximo" type="range" min="1" max="80" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig4">VALOR CORES</label>
+
+                <span id="txtFichaVermelhoPorcentMaximo"></span>
+                <input id="inputFichaVermelhoPorcentMaximo" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaVermelhoPorcentMinimo"></span>
+                <input id="inputFichaVermelhoPorcentMinimo" type="range" min="0" max="100" step="1.0">
+
+                <span id="txtFichaAzulPorcentMaximoLimite"></span>
+                <input id="inputFichaAzulPorcentMaximoLimite" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaAzulPorcentMinimoLimite"></span>
+                <input id="inputFichaAzulPorcentMinimoLimite" type="range" min="0" max="100" step="1.0">
+
+                </br>
+                <span id="txtFichaAzulPorcentMaximo"></span>
+                <input id="inputFichaAzulPorcentMaximo" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaAzulPorcentMinimo"></span>
+                <input id="inputFichaAzulPorcentMinimo" type="range" min="0" max="100" step="1.0">
+
+                <span id="txtFichaVermelhoPorcentMaximoLimite"></span>
+                <input id="inputFichaVermelhoPorcentMaximoLimite" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaVermelhoPorcentMinimoLimite"></span>
+                <input id="inputFichaVermelhoPorcentMinimoLimite" type="range" min="0" max="100" step="1.0">
+
+                </br>
+                </br>
+
+                <label id="labelConfig5">VALOR EMPATE</label>
+
+                <span id="txtFichaEmpate"></span>
+                <input id="inputFichaEmpate" type="range" min="0" max="20" step="1.0">
+                <span id="txtFichaEmpatePorcent"></span>
+                <input id="inputFichaEmpatePorcent" type="range" min="0" max="100" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig6">GESTÃO</label>
+
+                <span id="txtSurf"></span>
+                <input id="inputSurf" type="range" min="0" max="1" step="1.0">
+                <span id="txtGain"></span>
+                <input id="inputGain" type="range" min="1" max="1000000" step="1.0">
+                <span id="txtLoss"></span>
+                <input id="inputLoss" type="range" min="0" max="1000000" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig7">MARTINGALE</label>
+
+                <span id="txtGaleAlternado"></span>
+                <input id="inputGaleAlternado" type="range" min="0" max="1" step="1.0">
+                </br>
+                <input type="text" id="token" placeholder="token bot telegram">
+                <input type="text" id="chat" placeholder="chat_id grupo telegram">
+                <button id="btnSalvar" type="button">SALVAR</button>
+                <input type="text" id="email" placeholder="email">
+                </br>
+                <input type="password" id="password" placeholder="password">
+                <button id="btnLiberar" type="button">LIBERAR BOT</button>
+
+                <span id="userLiberacao"></span>
+                <span id="senhaLiberacao"></span>
+                </br>
+
+            </form>
+        </div>
+    </div>
+</body>
+<script src="popup.js"></script>
+
+</html>

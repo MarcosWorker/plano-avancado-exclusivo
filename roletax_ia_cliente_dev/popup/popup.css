@@ -1,0 +1,215 @@
+/* ---- Estilo Geral ---- */
+body {
+  font-family: "Inter", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 400px;
+  height: 500px;
+  overflow: hidden;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: linear-gradient(to bottom, #0a0a8e, #6200ea) fixed;
+}
+
+/* ---- Cabeçalho com Imagem ---- */
+.header {
+  width: 100%;
+  height: auto;
+  background: url("../assets/icon.png") no-repeat center;
+  background-size: cover;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+/* ---- Estilo dos Títulos ---- */
+h2,
+h3,
+h4 {
+  font-size: 1.6rem;
+  text-align: center;
+  font-weight: bold;
+  color: #00bfff; /* Azul fluorescente */
+  text-shadow: 5px 5px 10px #f134b2;
+}
+
+h4 {
+  font-size: 1.4rem;
+}
+
+h5 {
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+/* ---- Estilo dos Parágrafos ---- */
+p {
+  margin: 5px 0;
+  font-size: 1rem;
+  font-family: "Inter", Arial, sans-serif;
+  color: #00bfff; /* Azul fluorescente */
+}
+
+/* ---- Containers Principais ---- */
+#config-screen {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro translúcido */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+  border: 2px solid #6200ea;
+}
+
+/* ---- Botões ---- */
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #0a0a8e, #6200ea);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+  text-shadow: 1px 1px #000000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+button:hover {
+  background: linear-gradient(to right, #00bfff, #6200ea);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+  background: #4300a3;
+}
+
+/* ---- Inputs e Selects ---- */
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #00bfff;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  color: #ffffff;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+select:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 10px rgba(0, 191, 255, 0.8);
+  outline: none;
+}
+
+/* ---- Checkboxes ---- */
+input[type="checkbox"] {
+  accent-color: #00bfff;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+/* ---- Estilo das Listas ---- */
+#roletas-container,
+#legendas-list,
+#grupo-list {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid #6200ea;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+#legendas-list li,
+#grupo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 191, 255, 0.3);
+  flex-direction: column;
+}
+
+/* ---- Botões de Remover ---- */
+#legendas-list button,
+#grupo-list button {
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#legendas-list button:hover,
+#grupo-list button:hover {
+  background-color: #b02a37;
+}
+
+/* ---- Scrollbar Customizado ---- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #00bfff, #6200ea);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00bfff;
+}
+
+/* ---- Seções Importantes ---- */
+#quentes-frios-section {
+  width: calc(100% - 20px); /* Mantém a mesma largura das outras seções */
+  padding: 15px; /* Igual às outras seções */
+  margin: 10px 0; /* Alinha verticalmente */
+  border-radius: 12px; /* Mesmo arredondamento */
+  background-color: rgba(0, 0, 0, 0.6); /* Fundo translúcido */
+  border: 2px solid #6200ea; /* Borda neon */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); /* Sombreamento consistente */
+}
+
+/* ---- Esconde elementos ocultos ---- */
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}

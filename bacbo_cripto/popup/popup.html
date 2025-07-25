@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <title>AUTO BOT BACBO</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../popup/popup.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="container">
+        <div id="container2">
+
+            <form>
+                <img src="../assets/icon.png">
+
+                <button id="btnLink" type="button">ABRIR LINK</button>
+
+                <label id="labelCasas">CASAS DE APOSTA</label>
+                <a id="btnPlacerpBet" href="https://placerp.bet/" class="botao"
+                    target="_blank">PLACERP BET</a>
+                <a id="btnBetwinner" href="https://obrcjerg.top/26ur?p=%2Fregistration%2F" class="botao"
+                    target="_blank">BETWINNER</a>
+                <a id="btnStake" href="https://stake.com/?c=SxsXzbPd" class="botao" target="_blank">STAKE</a>
+                <a id="btnSegurobet"
+                    href="https://www.segurobet.com/cassino/slots/all?provider=all&accounts=%2A&register=%2A"
+                    class="botao" target="_blank">SEGUROBET</a>
+                <a id="btnBetano"
+                    href="https://br.betano.com/?siteid=29568&gclid=EAIaIQobChMI0qaNy87dhQMVdIvCCB2N0Q1QEAAYASAAEgJemvD_BwE"
+                    class="botao" target="_blank">BETANO</a>
+                <a id="btnReals" href="https://m.realsbet.com/live-casino" class="botao" target="_blank">REALS BET</a>
+
+                <label id="labelStatus">STATUS</label>
+                <span id="txtStatus"></span>
+                <button id="btnStatus" type="button">ZERAR CONTAGEM</button>
+
+                <label id="labelConfig1">CONFIGURAÇÃO</label>
+
+                <input type="text" id="gatilho" placeholder="Gatilho">
+                </br>
+                <input type="text" id="aposta" placeholder="Aposta">
+                </br>
+                <input type="number" id="gale" placeholder="Gale" min="0" max="10">
+                </br>
+                <input type="number" id="ciclo" placeholder="Ciclo" min="0" max="10">
+                </br>
+                <div id="galesPorCicloContainer"></div>
+                </br>
+                <input type="number" id="posLoss" placeholder="Pos Loss" min="0" max="10">
+                </br>
+                <input type="number" id="posGain" placeholder="Pos Gain" min="0" max="10">
+                </br>
+                <span id="txtFicha"></span>
+                <input id="inputFicha" type="range" min="0" max="7" step="1.0">
+                </br>
+                <button id="btnAdicionarGatilhos" type="button">ADICIONAR</button>
+
+                <ul id="listaGatilhos"></ul>
+                </br>
+                </br>
+
+                <label id="labelConfig2">INTELIGÊNCIA ARTIFICIAL</label>
+
+                <span id="txtHistorico"></span>
+                <input id="inputHistorico" type="range" min="10" max="125" step="1.0">
+                <span id="txtIaMinimo"></span>
+                <input id="inputIaMinimo" type="range" min="0" max="99" step="1.0">
+                <span id="txtIaMaximo"></span>
+                <input id="inputIaMaximo" type="range" min="1" max="100" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig3">EVENTOS</label>
+
+                <span id="txtEventoMinimo"></span>
+                <input id="inputEventoMinimo" type="range" min="0" max="125" step="1.0">
+                <span id="txtEventoMaximo"></span>
+                <input id="inputEventoMaximo" type="range" min="1" max="125" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig4">VALOR CORES</label>
+
+                <span id="txtFichaVermelhoPorcentMaximo"></span>
+                <input id="inputFichaVermelhoPorcentMaximo" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaVermelhoPorcentMinimo"></span>
+                <input id="inputFichaVermelhoPorcentMinimo" type="range" min="0" max="100" step="1.0">
+
+                <span id="txtFichaAzulPorcentMaximoLimite"></span>
+                <input id="inputFichaAzulPorcentMaximoLimite" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaAzulPorcentMinimoLimite"></span>
+                <input id="inputFichaAzulPorcentMinimoLimite" type="range" min="0" max="100" step="1.0">
+
+                </br>
+                <span id="txtFichaAzulPorcentMaximo"></span>
+                <input id="inputFichaAzulPorcentMaximo" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaAzulPorcentMinimo"></span>
+                <input id="inputFichaAzulPorcentMinimo" type="range" min="0" max="100" step="1.0">
+
+                <span id="txtFichaVermelhoPorcentMaximoLimite"></span>
+                <input id="inputFichaVermelhoPorcentMaximoLimite" type="range" min="0" max="100" step="1.0">
+                <span id="txtFichaVermelhoPorcentMinimoLimite"></span>
+                <input id="inputFichaVermelhoPorcentMinimoLimite" type="range" min="0" max="100" step="1.0">
+
+                </br>
+                </br>
+
+                <label id="labelConfig5">VALOR EMPATE</label>
+
+                <span id="txtFichaEmpate"></span>
+                <input id="inputFichaEmpate" type="range" min="0" max="7" step="1.0">
+                <span id="txtFichaEmpatePorcent"></span>
+                <input id="inputFichaEmpatePorcent" type="range" min="0" max="100" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig6">GESTÃO</label>
+
+                <span id="txtSurf"></span>
+                <input id="inputSurf" type="range" min="0" max="1" step="1.0">
+                <span id="txtGain"></span>
+                <input id="inputGain" type="range" min="1" max="5000" step="1.0">
+                <span id="txtLoss"></span>
+                <input id="inputLoss" type="range" min="0" max="5000" step="1.0">
+                </br>
+                </br>
+
+                <label id="labelConfig7">MARTINGALE</label>
+
+                <span id="txtGaleVirtual"></span>
+                <input id="inputGaleVirtual" type="range" min="0" max="11" step="1.0">
+                <span id="txtGaleAlternado"></span>
+                <input id="inputGaleAlternado" type="range" min="0" max="2" step="1.0">
+                <span id="txtGaleAlternadoContagem"></span>
+                <input id="inputGaleAlternadoContagem" type="range" min="0" max="12" step="1.0">
+                </br>
+                <input type="text" id="token" placeholder="token bot telegram">
+                <input type="text" id="chat" placeholder="chat_id grupo telegram">
+                <button id="btnSalvar" type="button">SALVAR</button>
+                <input type="text" id="email" placeholder="email">
+                </br>
+                <input type="password" id="password" placeholder="password">
+                <button id="btnLiberar" type="button">LIBERAR BOT</button>
+
+                <span id="userLiberacao"></span>
+                <span id="senhaLiberacao"></span>
+                </br>
+
+            </form>
+        </div>
+    </div>
+</body>
+<script src="popup.js"></script>
+
+</html>

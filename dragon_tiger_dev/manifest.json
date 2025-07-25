@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "DRAGON TIGER",
+  "description": "Automatize suas tarefas com o DRAGON TIGER! Aumente sua produtividade e libere seu tempo para o que realmente importa.",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "background",
+    "debugger",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://autobotcasino.com:5000/api/*",
+    "https://betano-br.evo-games.com/*",
+    "https://bwl.evo-games.com/*",
+    "https://live.fantasysportnetwork.com/*",
+    "https://babylonstkn.evo-games.com/*",
+    "https://atlas.evo-games.com/*",
+    "https://a8r.evo-games.com/*",
+    "https://betconstructlatam.evo-games.com/*",
+    "https://atlasbr.evo-games.com/*",
+    "https://kto-bet-br.evo-games.com/*",
+    "https://2yehmpp4.612qggbq.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "assets/icon.png",
+      "24": "assets/icon.png",
+      "32": "assets/icon.png"
+    },
+    "default_title": "DRAGON TIGER",
+    "default_popup": "popup/popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; script-src-elem 'self' https://apis.google.com; object-src 'self';"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://betano-br.evo-games.com/frontend/*",
+        "https://bwl.evo-games.com/frontend/*",
+        "https://live.fantasysportnetwork.com/frontend/*",
+        "https://babylonstkn.evo-games.com/frontend/*",
+        "https://atlas.evo-games.com/frontend/*",
+        "https://a8r.evo-games.com/frontend/*",
+        "https://betconstructlatam.evo-games.com/frontend/*",
+        "https://atlasbr.evo-games.com/frontend/*",
+        "https://kto-bet-br.evo-games.com/frontend/*",
+        "https://2yehmpp4.612qggbq.com/frontend/*"
+      ],
+      "all_frames": true,
+      "js": ["content/contentScript.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

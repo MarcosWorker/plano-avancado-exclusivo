@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "ROLETA EXCLUSIVE",
+  "description": "Automatize suas tarefas com o ROLETA EXCLUSIVE! Aumente sua produtividade e libere seu tempo para o que realmente importa.",
+  "version": "4.0",
+  "permissions": ["activeTab", "storage", "scripting", "background"],
+  "host_permissions": [
+    "https://autobotcasino.com/*",
+    "https://cachedownload-br.p-content.gambling-malta.com/live/bundles/*",
+    "https://dl-com.c365play.com/live_desktop/bundles/*",
+    "https://cachedownload-swisscur.onegameslink.com/live/html5/desktop/bundles/*",
+    "https://cachedownload-betconstructbr.onegameslink.com/livedistributed/*",
+    "https://cachedownload-ktobr.onegameslink.com/livedistributed/*",
+    "https://cachedownload-superbet.onegameslink.com/livedistributed/*",
+    "https://cachedownload-novibetbr.onegameslink.com/livedistributed/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "assets/icon.png",
+      "24": "assets/icon.png",
+      "32": "assets/icon.png"
+    },
+    "default_title": "ROLETA EXCLUSIVE",
+    "default_popup": "popup/popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; script-src-elem 'self' https://apis.google.com; object-src 'self';"
+  },
+  "options_page": "options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://cachedownload-br.p-content.gambling-malta.com/live/bundles/*",
+        "https://dl-com.c365play.com/live_desktop/bundles/*",
+        "https://cachedownload-swisscur.onegameslink.com/live/html5/desktop/bundles/*",
+        "https://cachedownload-betconstructbr.onegameslink.com/livedistributed/*",
+        "https://cachedownload-ktobr.onegameslink.com/livedistributed/*",
+        "https://cachedownload-superbet.onegameslink.com/livedistributed/*",
+        "https://atlaslive-br.onegameslink.com/livedistributed/*",
+        "https://cachedownload-softswisscur3.onegameslink.com/livedistributed/*",
+        "https://dl-br.c365play.com/livedistributed/*",
+        "https://cachedownload-novibetbr.onegameslink.com/livedistributed/*"
+      ],
+      "all_frames": true,
+      "js": ["content/contentScript.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
