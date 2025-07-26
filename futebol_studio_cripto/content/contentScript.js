@@ -793,7 +793,6 @@ async function apostar() {
         valorAntesDeAposta = valorBanca();
         let valorDoCiclo = valorCiclo();
         await selecionaFicha();
-        console.info('valorDoCiclo: ' + valorDoCiclo);
         if (apostaGatilhoEncontrado === 'V' && achouFicha && parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
 
             const numRepeticoes = adicionarFicha();
@@ -1246,27 +1245,22 @@ async function apostarCasaFichaBaixa() {
 }
 
 async function repetirAposta() {
-    console.info('Repetindo Aposta');
     await click(document.getElementsByClassName(elementos.e4)[1]);
 }
 
 async function apostarVisitante() {
-    console.info('Apostando Visitante');
     await click(document.getElementsByClassName(elementos.e2)[0]);
 }
 
 async function apostarCasa() {
-    console.info('Apostando Casa');
     await click(document.getElementsByClassName(elementos.e3)[0]);
 }
 
 async function apostarEmpate() {
-    console.info('Apostando Empate');
     await click(document.getElementsByClassName(elementos.e5)[0]);
 }
 
 async function desfazerAposta() {
-    console.info('Desfazendo Aposta');
     await click(document.getElementsByClassName(elementos.e4)[0]);
 }
 
@@ -1929,7 +1923,6 @@ async function analisaFutebolStudio() {
                 ultimaApostaEmpate = false;
                 parseInt(estrategias.surf) == 1 ? fazerSurf() : rodada = 0;
                 salvarStatus();
-                console.info('FIM DA JOGADA: ' + JSON.stringify(terminal));
             }
         }
     }
