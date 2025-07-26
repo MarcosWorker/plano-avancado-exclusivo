@@ -1163,7 +1163,7 @@ function galeInteligenteAposta3(gale) {
 }
 
 function confirmarGreen(resultado) {
-    return false;
+    
     if (apostaGatilhoEncontrado == resultado[0]) {
         return true;
     } else if (parseInt(estrategias.fichaEmpate) > 0 && resultado[0] === 'E') {
