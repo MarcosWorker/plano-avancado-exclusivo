@@ -793,7 +793,6 @@ async function apostar() {
         valorAntesDeAposta = valorBanca();
         let valorDoCiclo = valorCiclo();
         await selecionaFicha();
-        console.info('valorDoCiclo: ' + valorDoCiclo);
         if (apostaGatilhoEncontrado === 'V' && achouFicha && parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
 
             const numRepeticoes = adicionarFicha();
@@ -1163,7 +1162,6 @@ function galeInteligenteAposta3(gale) {
 }
 
 function confirmarGreen(resultado) {
-    return false;
     if (apostaGatilhoEncontrado == resultado[0]) {
         return true;
     } else if (parseInt(estrategias.fichaEmpate) > 0 && resultado[0] === 'E') {
@@ -1247,27 +1245,22 @@ async function apostarCasaFichaBaixa() {
 }
 
 async function repetirAposta() {
-    console.info('Repetindo Aposta');
     await click(document.getElementsByClassName(elementos.e4)[1]);
 }
 
 async function apostarVisitante() {
-    console.info('Apostando Visitante');
     await click(document.getElementsByClassName(elementos.e2)[0]);
 }
 
 async function apostarCasa() {
-    console.info('Apostando Casa');
     await click(document.getElementsByClassName(elementos.e3)[0]);
 }
 
 async function apostarEmpate() {
-    console.info('Apostando Empate');
     await click(document.getElementsByClassName(elementos.e5)[0]);
 }
 
 async function desfazerAposta() {
-    console.info('Desfazendo Aposta');
     await click(document.getElementsByClassName(elementos.e4)[0]);
 }
 
@@ -1311,8 +1304,13 @@ function fazerPosGainGreen() {
 
 function fazerPosGainRed() {
     if (estrategias.tipoPosGain == 1) {
-        terminal[gatilhoConfirmado].contagemPosGain = 0;
-        terminal[gatilhoConfirmado].contagemPosLoss = 0;
+
+        if (terminal[gatilhoConfirmado].ciclo > 0 && terminal[gatilhoConfirmado].ciclo > terminal[gatilhoConfirmado].contagemCiclo) {
+
+        } else {
+            terminal[gatilhoConfirmado].contagemPosGain = 0;
+            terminal[gatilhoConfirmado].contagemPosLoss = 0;
+        }
     } else if (estrategias.tipoPosGain == 2) {
         terminal[gatilhoConfirmado].contagemPosGain = 0;
     }
@@ -1903,6 +1901,7 @@ async function analisaFutebolStudio() {
                     atualizarHistorico(`🟥RED FAKE🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED FAKE';
                 } else {
+                    fazerPosGainRed();
                     if (terminal[gatilhoConfirmado].ciclo > 0 && terminal[gatilhoConfirmado].ciclo > terminal[gatilhoConfirmado].contagemCiclo) {
                         terminal[gatilhoConfirmado].contagemCiclo++;
                     } else {
@@ -1913,7 +1912,6 @@ async function analisaFutebolStudio() {
                     enviarMsgTelegram(`❌❌❌ RED \n\n${mensagemTelegramDadosRed()}`);
                     atualizarHistorico(`🟥RED🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED';
-                    fazerPosGainRed();
                 }
 
                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
