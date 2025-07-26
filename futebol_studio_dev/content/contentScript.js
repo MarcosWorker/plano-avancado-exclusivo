@@ -1163,7 +1163,6 @@ function galeInteligenteAposta3(gale) {
 }
 
 function confirmarGreen(resultado) {
-    return false;
     if (apostaGatilhoEncontrado == resultado[0]) {
         return true;
     } else if (parseInt(estrategias.fichaEmpate) > 0 && resultado[0] === 'E') {
@@ -1311,8 +1310,13 @@ function fazerPosGainGreen() {
 
 function fazerPosGainRed() {
     if (estrategias.tipoPosGain == 1) {
-        terminal[gatilhoConfirmado].contagemPosGain = 0;
-        terminal[gatilhoConfirmado].contagemPosLoss = 0;
+
+        if (terminal[gatilhoConfirmado].ciclo > 0 && terminal[gatilhoConfirmado].ciclo > terminal[gatilhoConfirmado].contagemCiclo) {
+
+        } else {
+            terminal[gatilhoConfirmado].contagemPosGain = 0;
+            terminal[gatilhoConfirmado].contagemPosLoss = 0;
+        }
     } else if (estrategias.tipoPosGain == 2) {
         terminal[gatilhoConfirmado].contagemPosGain = 0;
     }
@@ -1903,6 +1907,7 @@ async function analisaFutebolStudio() {
                     atualizarHistorico(`🟥RED FAKE🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED FAKE';
                 } else {
+                    fazerPosGainRed();
                     if (terminal[gatilhoConfirmado].ciclo > 0 && terminal[gatilhoConfirmado].ciclo > terminal[gatilhoConfirmado].contagemCiclo) {
                         terminal[gatilhoConfirmado].contagemCiclo++;
                     } else {
@@ -1913,7 +1918,6 @@ async function analisaFutebolStudio() {
                     enviarMsgTelegram(`❌❌❌ RED \n\n${mensagemTelegramDadosRed()}`);
                     atualizarHistorico(`🟥RED🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED';
-                    fazerPosGainRed();
                 }
 
                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
@@ -1925,6 +1929,7 @@ async function analisaFutebolStudio() {
                 ultimaApostaEmpate = false;
                 parseInt(estrategias.surf) == 1 ? fazerSurf() : rodada = 0;
                 salvarStatus();
+                console.info('FIM DA JOGADA: ' + JSON.stringify(terminal));
             }
         }
     }
