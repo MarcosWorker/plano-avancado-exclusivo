@@ -1163,6 +1163,7 @@ function galeInteligenteAposta3(gale) {
 }
 
 function confirmarGreen(resultado) {
+    return false;
     if (apostaGatilhoEncontrado == resultado[0]) {
         return true;
     } else if (parseInt(estrategias.fichaEmpate) > 0 && resultado[0] === 'E') {
@@ -1368,7 +1369,7 @@ function valorFicha(index) {
 
 function valorNumericoFicha(index, multi) {
     switch (index) {
-        case 1: return parseFloat(multi) * 0.50;
+        case 1: return parseFloat(multi) == 0 ? 0.50 : parseFloat(multi) * 0.50 * 2;
         case 2: return parseFloat(multi) * 1;
         case 3: return parseFloat(multi) * 1.50;
         case 4: return parseFloat(multi) * 2;
@@ -1419,7 +1420,7 @@ function mensagemTelegramGale(resultado, galeAtual, cicloAtual) {
         `⚡️ *ULTIMO RESULTADO*: ${resultado}\n` +
         `🔁 *GALE*: ${galeAtual}\n` +
         `🔄 *CICLO*: ${cicloAtual}\n` +
-        `💰 *VALOR DA APOSTA*: ${valorNumericoFicha(terminal[gatilhoConfirmado].ficha, ciclo > 0 ? ciclo * galeAtual : galeAtual)}\n` +
+        // `💰 *VALOR DA APOSTA*: ${valorNumericoFicha(terminal[gatilhoConfirmado].ficha, cicloAtual > 0 ? cicloAtual * galeAtual : galeAtual)}\n` +
         `📊 *ASSERTIVIDADE*: ${assertividade}%\n`
     );
 }
