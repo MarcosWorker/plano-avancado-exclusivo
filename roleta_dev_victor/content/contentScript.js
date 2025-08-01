@@ -23,6 +23,7 @@ let contagemErros = 0;
 let contagemConfirmacaoSolo = 0;
 let valorAntesDeAposta = 0;
 let valorDePerca = 0;
+let valorDeGanho = 0;
 let pararTudo = false;
 
 const accountPanel = '.account-panel';
@@ -778,7 +779,6 @@ function modoTimer() {
 }
 
 function validarModo() {
-
     if (configuracaoAtual.modoIA.ativo) {
         modoIA();
         return;
@@ -868,7 +868,7 @@ async function modoIA() {
                     validarColorRace(sequenciaAtual[0]);
                 } else {
                     contagemConfirmacaoSolo++;
-                    if (contagemConfirmacaoSolo == 5) {
+                    if (contagemConfirmacaoSolo == 8) {
                         resetTelaRoleta();
                         // listaCarrossel = listaCarrossel.filter(item => item !== roletaAtualCarrossel);
                         roletaAtualCarrossel = '';
@@ -883,6 +883,7 @@ async function modoIA() {
             } else if (rodada > 1) {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
+                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreenIA();
                     resetTelaRoleta();
@@ -1011,6 +1012,7 @@ async function modoQuentesFrios() {
             } else if (rodada > 1) {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
+                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreenQuentesFrios();
                     resetTelaRoleta();
@@ -1158,6 +1160,7 @@ async function modoCarrossel() {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await getContagem();
+                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreen(contagemStorage);
                     definirCicloNoGreen(contagemStorage);
@@ -1307,6 +1310,7 @@ async function modoSolo() {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await getContagem();
+                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreen(contagemStorage);
                     definirCicloNoGreen(contagemStorage);
@@ -1481,6 +1485,7 @@ async function modoLobby() {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await getContagem();
+                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreen(contagemStorage);
                     definirCicloNoGreen(contagemStorage);
@@ -3115,11 +3120,23 @@ async function validarJogadasIa() {
 }
 
 function definirStopDePerca() {
-    if (valorAntesDeAposta > valorNumericoBanca() && parseInt(configuracaoAtual.stop.loss) > 0) {
-        valorDePerca = valorDePerca + (valorAntesDeAposta - valorNumericoBanca());
+    let valorDeBanca = valorNumericoBanca();
+    if (valorAntesDeAposta > valorDeBanca && parseInt(configuracaoAtual.stop.loss) > 0) {
+        valorDePerca = valorDePerca + (valorAntesDeAposta - valorDeBanca);
         if (parseFloat(configuracaoAtual.stop.loss) <= valorDePerca) {
             pararTudo = true;
-            createToast(`STOP DE PERDA ATINGIDO! Banca: R$ ${valorNumericoBanca()} - Perca: R$ ${valorDePerca}`, 10000);
+            createToast(`STOP DE PERDA ATINGIDO! Banca: R$ ${valorDeBanca} - Perca: R$ ${valorDePerca}`, 10000);
+        }
+    }
+}
+
+function tirarDiferencaDeganho() {
+    let valorDeBanca = valorNumericoBanca();
+    if (valorAntesDeAposta < valorDeBanca) {
+        valorDeGanho = (valorDeBanca - valorAntesDeAposta);
+        if (valorDePerca > 0) {
+            valorDePerca = (valorDePerca - valorDeGanho) > 0 ? (valorDePerca - valorDeGanho) : 0;
+            createToast(`VALOR DE PERCA ATUALIZADO PARA  R$ ${valorDePerca}.00`, 10000);
         }
     }
 }
@@ -3199,14 +3216,14 @@ async function executarAposta() {
         let multiplicadorGale = definirMultiplicadorGale();
 
         if (fazerLossVirtual(contagemStorage.contagemLossVirtual)) {
-            inserirTextoDisplay(`LOSS VIRTUAL ${contagemStorage.contagemLossVirtual} APOSTA ${aposta} GALE ${galeAtual} CICLO ${repeticaoCiclo}`, 2);
-            enviarMsgTelegram(`${roleta.nome}\nLOSS VIRTUAL ${contagemStorage.contagemLossVirtual}\n${aposta}\nGALE ${galeAtual}\nCICLO ${repeticaoCiclo}`);
+            inserirTextoDisplay(`LOSS VIRTUAL ${contagemStorage.contagemLossVirtual} APOSTA ${aposta} GALE ${galeAtual} CICLO ${contagemStorage.contagemCiclo}`, 2);
+            enviarMsgTelegram(`${roleta.nome}\nLOSS VIRTUAL ${contagemStorage.contagemLossVirtual}\n${aposta}\nGALE ${galeAtual}\nCICLO ${contagemStorage.contagemCiclo}`);
             return;
         }
 
         if (fazerPosGreen(contagemStorage.contagemPosGreen)) {
-            inserirTextoDisplay(`POS GREEN ${contagemStorage.contagemPosGreen} APOSTA ${aposta} GALE ${galeAtual} CICLO ${repeticaoCiclo}`, 2);
-            enviarMsgTelegram(`${roleta.nome}\nPOS GREEN  ${contagemStorage.contagemPosGreen}\n${aposta}\nGALE ${galeAtual}\nCICLO ${repeticaoCiclo}`);
+            inserirTextoDisplay(`POS GREEN ${contagemStorage.contagemPosGreen} APOSTA ${aposta} GALE ${galeAtual} CICLO ${contagemStorage.contagemCiclo}`, 2);
+            enviarMsgTelegram(`${roleta.nome}\nPOS GREEN  ${contagemStorage.contagemPosGreen}\n${aposta}\nGALE ${galeAtual}\nCICLO ${contagemStorage.contagemCiclo}`);
             return;
         }
 
@@ -3225,7 +3242,7 @@ async function executarAposta() {
             return;
         }
 
-        definirMensagemNaAposta(aposta, (galeAtual), (repeticaoCiclo - 1));
+        definirMensagemNaAposta(aposta, (galeAtual), contagemStorage.contagemCiclo);
 
         if (!simular) {
             if (galeAtual == 0) {
@@ -3478,20 +3495,18 @@ function definirMensagemNaApostaQuentesFrios(aposta, gale) {
     inserirTextoDisplay(`${configuracaoAtual.quentesFrios.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale}`, 2);
 }
 
-function definirMensagemNaAposta(aposta, gale, repeticaoCiclo) {
+function definirMensagemNaAposta(aposta, gale, contagemCiclo) {
     if (configuracaoAtual.congruencia.ativo) {
-        enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${repeticaoCiclo}`);
-        inserirTextoDisplay(`${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${repeticaoCiclo}`, 2);
+        enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${contagemCiclo}`);
+        inserirTextoDisplay(`${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${contagemCiclo}`, 2);
     } else {
-        enviarMsgTelegram(`${roleta.nome}\n${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${repeticaoCiclo}`);
-        inserirTextoDisplay(`${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${repeticaoCiclo}`, 2);
+        enviarMsgTelegram(`${roleta.nome}\n${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${contagemCiclo}`);
+        inserirTextoDisplay(`${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${contagemCiclo}`, 2);
     }
 }
 
 function definirMensagemNaApostaIA(aposta, gale) {
-    //enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.modoIA.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}`);
-    //mandar somente pra victor
-    enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.modoIA.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\n${estrategiaIAmsg}`);
+    enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.modoIA.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}`);
     inserirTextoDisplay(`${configuracaoAtual.modoIA.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale}`, 2);
 }
 
@@ -3698,7 +3713,7 @@ async function definirCicloNoRed(contagemStorage) {
 
         let novaContagemCiclo = contagemStorage.contagemCiclo + 1;
 
-        if (novaContagemCiclo > configuracaoAtual.congruencia.ciclos) {
+        if (novaContagemCiclo > configuracaoAtual.ciclos) {
             await salvarJogada(jogadasLobby[0], 0, 0, 0, 0);
 
         } else {
@@ -3920,7 +3935,15 @@ async function obterJogadaSalva(jogadaId) {
                 resolve(jogada);
             } else {
                 const novaJogada = await salvarJogada({ id: jogadaId, gatilho: "", aposta: "" }, 0, 0, 0, 0);
-                resolve(novaJogada);
+                resolve({
+                    id: jogadaId,
+                    gatilho: "",
+                    aposta: "",
+                    contagemCiclo: 0,
+                    contagemLossVirtual: 0,
+                    contagemPosGreen: 0,
+                    contagemPauseWin: 0
+                });
             }
         });
     });

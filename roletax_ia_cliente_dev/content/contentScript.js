@@ -3216,14 +3216,14 @@ async function executarAposta() {
         let multiplicadorGale = definirMultiplicadorGale();
 
         if (fazerLossVirtual(contagemStorage.contagemLossVirtual)) {
-            inserirTextoDisplay(`LOSS VIRTUAL ${contagemStorage.contagemLossVirtual} APOSTA ${aposta} GALE ${galeAtual} CICLO ${repeticaoCiclo}`, 2);
-            enviarMsgTelegram(`${roleta.nome}\nLOSS VIRTUAL ${contagemStorage.contagemLossVirtual}\n${aposta}\nGALE ${galeAtual}\nCICLO ${repeticaoCiclo}`);
+            inserirTextoDisplay(`LOSS VIRTUAL ${contagemStorage.contagemLossVirtual} APOSTA ${aposta} GALE ${galeAtual} CICLO ${contagemStorage.contagemCiclo}`, 2);
+            enviarMsgTelegram(`${roleta.nome}\nLOSS VIRTUAL ${contagemStorage.contagemLossVirtual}\n${aposta}\nGALE ${galeAtual}\nCICLO ${contagemStorage.contagemCiclo}`);
             return;
         }
 
         if (fazerPosGreen(contagemStorage.contagemPosGreen)) {
-            inserirTextoDisplay(`POS GREEN ${contagemStorage.contagemPosGreen} APOSTA ${aposta} GALE ${galeAtual} CICLO ${repeticaoCiclo}`, 2);
-            enviarMsgTelegram(`${roleta.nome}\nPOS GREEN  ${contagemStorage.contagemPosGreen}\n${aposta}\nGALE ${galeAtual}\nCICLO ${repeticaoCiclo}`);
+            inserirTextoDisplay(`POS GREEN ${contagemStorage.contagemPosGreen} APOSTA ${aposta} GALE ${galeAtual} CICLO ${contagemStorage.contagemCiclo}`, 2);
+            enviarMsgTelegram(`${roleta.nome}\nPOS GREEN  ${contagemStorage.contagemPosGreen}\n${aposta}\nGALE ${galeAtual}\nCICLO ${contagemStorage.contagemCiclo}`);
             return;
         }
 
@@ -3242,7 +3242,7 @@ async function executarAposta() {
             return;
         }
 
-        definirMensagemNaAposta(aposta, (galeAtual), (repeticaoCiclo - 1));
+        definirMensagemNaAposta(aposta, (galeAtual), contagemStorage.contagemCiclo);
 
         if (!simular) {
             if (galeAtual == 0) {
@@ -3495,13 +3495,13 @@ function definirMensagemNaApostaQuentesFrios(aposta, gale) {
     inserirTextoDisplay(`${configuracaoAtual.quentesFrios.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale}`, 2);
 }
 
-function definirMensagemNaAposta(aposta, gale, repeticaoCiclo) {
+function definirMensagemNaAposta(aposta, gale, contagemCiclo) {
     if (configuracaoAtual.congruencia.ativo) {
-        enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${repeticaoCiclo}`);
-        inserirTextoDisplay(`${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${repeticaoCiclo}`, 2);
+        enviarMsgTelegram(`${roleta.nome}\n${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${contagemCiclo}`);
+        inserirTextoDisplay(`${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${contagemCiclo}`, 2);
     } else {
-        enviarMsgTelegram(`${roleta.nome}\n${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${repeticaoCiclo}`);
-        inserirTextoDisplay(`${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${repeticaoCiclo}`, 2);
+        enviarMsgTelegram(`${roleta.nome}\n${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${contagemCiclo}`);
+        inserirTextoDisplay(`${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${contagemCiclo}`, 2);
     }
 }
 
@@ -3713,7 +3713,7 @@ async function definirCicloNoRed(contagemStorage) {
 
         let novaContagemCiclo = contagemStorage.contagemCiclo + 1;
 
-        if (novaContagemCiclo > configuracaoAtual.congruencia.ciclos) {
+        if (novaContagemCiclo > configuracaoAtual.ciclos) {
             await salvarJogada(jogadasLobby[0], 0, 0, 0, 0);
 
         } else {
