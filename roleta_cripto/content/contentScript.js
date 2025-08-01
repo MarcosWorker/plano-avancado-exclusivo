@@ -2814,14 +2814,14 @@ async function bp() {
         let multiplicadorGale = bl();
 
         if (ch(contagemStorage.contagemLossVirtual)) {
-            u(`LOSS VIRTUAL ${contagemStorage.contagemLossVirtual} APOSTA ${aposta} GALE ${galeAtual} CICLO ${repeticaoCiclo}`, 2);
-            a(`${roleta.nome}\nLOSS VIRTUAL ${contagemStorage.contagemLossVirtual}\n${aposta}\nGALE ${galeAtual}\nCICLO ${repeticaoCiclo}`);
+            u(`LOSS VIRTUAL ${contagemStorage.contagemLossVirtual} APOSTA ${aposta} GALE ${galeAtual} CICLO ${contagemStorage.contagemCiclo}`, 2);
+            a(`${roleta.nome}\nLOSS VIRTUAL ${contagemStorage.contagemLossVirtual}\n${aposta}\nGALE ${galeAtual}\nCICLO ${contagemStorage.contagemCiclo}`);
             return;
         }
 
         if (cg(contagemStorage.contagemPosGreen)) {
-            u(`POS GREEN ${contagemStorage.contagemPosGreen} APOSTA ${aposta} GALE ${galeAtual} CICLO ${repeticaoCiclo}`, 2);
-            a(`${roleta.nome}\nPOS GREEN  ${contagemStorage.contagemPosGreen}\n${aposta}\nGALE ${galeAtual}\nCICLO ${repeticaoCiclo}`);
+            u(`POS GREEN ${contagemStorage.contagemPosGreen} APOSTA ${aposta} GALE ${galeAtual} CICLO ${contagemStorage.contagemCiclo}`, 2);
+            a(`${roleta.nome}\nPOS GREEN  ${contagemStorage.contagemPosGreen}\n${aposta}\nGALE ${galeAtual}\nCICLO ${contagemStorage.contagemCiclo}`);
             return;
         }
 
@@ -2839,7 +2839,7 @@ async function bp() {
             return;
         }
 
-        bs(aposta, (galeAtual), (repeticaoCiclo - 1));
+        bs(aposta, (galeAtual), contagemStorage.contagemCiclo);
 
         if (!simular) {
             for (let i = 0; i < aposta.length; i++) {
@@ -3085,13 +3085,13 @@ function br(aposta, gale) {
     u(`${configuracaoAtual.quentesFrios.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale}`, 2);
 }
 
-function bs(aposta, gale, repeticaoCiclo) {
+function bs(aposta, gale, contagemCiclo) {
     if (configuracaoAtual.congruencia.ativo) {
-        a(`${roleta.nome}\n${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${repeticaoCiclo}`);
-        u(`${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${repeticaoCiclo}`, 2);
+        a(`${roleta.nome}\n${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${contagemCiclo}`);
+        u(`${configuracaoAtual.congruencia.ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${contagemCiclo}`, 2);
     } else {
-        a(`${roleta.nome}\n${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${repeticaoCiclo}`);
-        u(`${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${repeticaoCiclo}`, 2);
+        a(`${roleta.nome}\n${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'}\n${aposta}\nGALE ${gale}\nCICLO ${contagemCiclo}`);
+        u(`${jogadasLobby[0].ficha == 0 ? 'SIMULAÇÃO' : 'APOSTANDO'} ${aposta} GALE ${gale} CICLO ${contagemCiclo}`, 2);
     }
 }
 
@@ -3287,7 +3287,7 @@ async function cb(contagemStorage) {
 
         let novaContagemCiclo = contagemStorage.contagemCiclo + 1;
 
-        if (novaContagemCiclo > configuracaoAtual.congruencia.ciclos) {
+        if (novaContagemCiclo > configuracaoAtual.ciclos) {
             await cm(jogadasLobby[0], 0, 0, 0, 0);
 
         } else {
