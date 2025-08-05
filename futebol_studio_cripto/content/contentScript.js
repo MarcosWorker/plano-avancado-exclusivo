@@ -69,6 +69,7 @@ let valorAntesDeAposta = 0;
 let valorDePerca = 0;
 let valorDeGanho = 0;
 let pararTudo = false;
+let apostaConfirmada = false;
 
 function enviarMsgTelegram(msg) {
     try {
@@ -1464,7 +1465,7 @@ function mensagemTelegramDadosRed() {
 function fazerSurf() {
     rodada = 1;
     if (confirmarAposta()) {
-
+        apostaConfirmada = true;
         apostaGatilhoEncontrado = terminal[gatilhoConfirmado].aposta[0];
 
         if (parseInt(estrategias.galeVirtual) > 0) {
@@ -1522,6 +1523,7 @@ function fazerSurf() {
         document.getElementById(elementos.e10).textContent = 'ESTRATEGIA NÃO CONFIRMADA NESSA RODADA';
         document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
         rodada = 0;
+        apostaConfirmada = false;
     }
 }
 
@@ -1535,7 +1537,7 @@ async function analisaFutebolStudio() {
         listarHistorico();
     } else if (rodada == 1 && proximaRodada()) {
         if (confirmarAposta()) {
-
+            apostaConfirmada = true;
             apostaGatilhoEncontrado = terminal[gatilhoConfirmado].aposta[0];
 
             if (parseInt(estrategias.galeVirtual) > 0) {
@@ -1593,6 +1595,7 @@ async function analisaFutebolStudio() {
             document.getElementById(elementos.e10).textContent = 'ESTRATEGIA NÃO CONFIRMADA NESSA RODADA';
             document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
             rodada = 0;
+            apostaConfirmada = false;
         }
     } else if (rodada > 1 && proximaRodada()) {
         if (confirmarGreen(historicoTotal[0])) {
@@ -2049,11 +2052,9 @@ setInterval(async () => {
                 }
 
                 ociosidade++;
-                if (ociosidade > 250 && rodada == 0) {
+                if (ociosidade > 250 && !apostaConfirmada) {
                     liberarApostaOciosidade = true;
                     ociosidade = 0;
-                } else if (ociosidade > 250 && apostaGatilhoEncontrado == '') {
-                    liberarApostaOciosidade = true;
                 }
 
 
