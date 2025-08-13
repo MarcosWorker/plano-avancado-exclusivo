@@ -29,6 +29,7 @@ let estrategias = {
     chat: ''
 }
 
+let elementHist = '';
 let elementos = {};
 
 const tableNameMapping = [
@@ -295,33 +296,47 @@ function click(x, y, tentativas = 0) {
 }
 
 function fecharBaccarat() {
-    if (document.getElementsByClassName(elementos.g).length == 7) {
-        click((Math.trunc(document.getElementsByClassName(elementos.g)[6].getBoundingClientRect().x)
-            + Math.trunc(document.getElementsByClassName(elementos.g)[6].getBoundingClientRect().width / 2)),
-            (Math.trunc(document.getElementsByClassName(elementos.g)[6].getBoundingClientRect().y)
-                + Math.trunc(document.getElementsByClassName(elementos.g)[6].getBoundingClientRect().height / 2)));
+    if (document.querySelector(elementos.h)) {
+        document.querySelector(elementos.h).click();
     }
 }
 
 function clicarInatividade() {
-    if (document.getElementsByClassName(elementos.g).length == 8) {
-        click((Math.trunc(document.getElementsByClassName(elementos.g)[7].getBoundingClientRect().x)
-            + Math.trunc(document.getElementsByClassName(elementos.g)[7].getBoundingClientRect().width / 2)),
-            (Math.trunc(document.getElementsByClassName(elementos.g)[7].getBoundingClientRect().y)
-                + Math.trunc(document.getElementsByClassName(elementos.g)[7].getBoundingClientRect().height / 2)));
+    if (document.querySelector(elementos.p)) {
+        document.querySelector(elementos.p).click();
     }
 }
 
+function buscarClasseHistoricoPorTexto(texto) {
+    // Passo 1: Encontra o span com o texto especificado
+    const spanAlvo = Array.from(document.querySelectorAll('span'))
+        .find(span => span.textContent.trim() === texto);
+
+    if (!spanAlvo) {
+        return null;
+    }
+
+    // Passo 2: Encontra o div pai que contém classes
+    const divPai = spanAlvo.closest('div[class]');
+
+    if (!divPai) {
+        return null;
+    }
+
+    // Passo 3: Retorna apenas a PRIMEIRA classe (ex: "io_ip")
+    return divPai.className.split(' ')[0]; // Divide a string e pega o primeiro item
+}
+
 function clicarNoHistorico() {
-    click((Math.trunc(document.getElementsByClassName(elementos.e)[0].getBoundingClientRect().x)
-        + Math.trunc(document.getElementsByClassName(elementos.e)[0].getBoundingClientRect().width / 2)),
-        (Math.trunc(document.getElementsByClassName(elementos.e)[0].getBoundingClientRect().y)
-            + Math.trunc(document.getElementsByClassName(elementos.e)[0].getBoundingClientRect().height / 2)));
+    click((Math.trunc(document.getElementsByClassName(elementHist)[0].getBoundingClientRect().x)
+        + Math.trunc(document.getElementsByClassName(elementHist)[0].getBoundingClientRect().width / 2)),
+        (Math.trunc(document.getElementsByClassName(elementHist)[0].getBoundingClientRect().y)
+            + Math.trunc(document.getElementsByClassName(elementHist)[0].getBoundingClientRect().height / 2)));
 }
 
 function defineCor(elemento) {
 
-    let cor = window.getComputedStyle(elemento.children[0]).backgroundColor;
+    let cor = window.getComputedStyle(elemento).backgroundColor;
 
     if (cor === 'rgb(45, 139, 232)') {
         return 'A';
@@ -359,29 +374,8 @@ function porcentagemEmpateBaccarat() {
     return calcularPorcentagem('E');
 }
 
-function getElementoNaSuaOrdem(posicaoDesejada) {
-    const totalLinhas = 6;
-    const totalColunas = 18;
-
-    const coluna = Math.floor(posicaoDesejada / totalLinhas);
-    const linha = posicaoDesejada % totalLinhas;
-
-    const indexPadrao = linha * totalColunas + coluna;
-
-    return document.getElementsByClassName(elementos.f)[indexPadrao];
-}
-
 function tamanhoHistorico() {
-    let tamanho = 0;
-    for (let i = 0; i < 108; i++) {
-        if (getElementoNaSuaOrdem(i).textContent != '') {
-            tamanho++;
-        } else {
-            break;
-        }
-    }
-
-    return tamanho;
+    return document.getElementsByClassName(elementHist).length;
 }
 
 function listarHistoricoConfig(lista) {
@@ -394,22 +388,31 @@ function listarHistoricoConfig(lista) {
 }
 
 function listarHistorico() {
-    historico = [];
-    let historicoSelecionado = [];
-    if (historicoSelecionado.length == 0) {
-        for (let i = 0; i < 108; i++) {
-            let elemento = getElementoNaSuaOrdem(i);
-            if (elemento.textContent == '') {
-                break;
-            }
-            let cor = defineCor(elemento);
-            if (cor.concat("", elemento.textContent).length > 1) {
-                historicoSelecionado.push(cor.concat("", elemento.textContent));
+    // Coleta todos os elementos
+    const elementos = document.getElementsByClassName(elementHist);
+    const total = elementos.length;
+    const linhas = 6;
+
+    // Calcula o número de colunas
+    const colunas = Math.ceil(total / linhas);
+
+    // Array para o resultado final
+    const resultado = [];
+
+    // Constrói a nova ordem coluna por coluna
+    for (let col = 0; col < colunas; col++) {
+        for (let lin = 0; lin < linhas; lin++) {
+            const indiceOriginal = lin * colunas + col;
+
+            // Evita índices inválidos se total não for múltiplo perfeito
+            if (indiceOriginal < total) {
+                const cor = defineCor(elementos[indiceOriginal]);
+                resultado.push(cor.concat("", elementos[indiceOriginal].textContent));
             }
         }
     }
 
-    historico = listarHistoricoConfig(historicoSelecionado);
+    historico = resultado.reverse();
 }
 
 function confirmarAposta() {
@@ -565,89 +568,89 @@ function calcularAssertividade(terminal) {
 
 function selecionaFicha() {
     if (terminal[gatilhoConfirmado].ficha == 1) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '0.2') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '0.2') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 2 || terminal[gatilhoConfirmado].ficha == 3 || terminal[gatilhoConfirmado].ficha == 4 || terminal[gatilhoConfirmado].ficha == 5) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '1') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '1') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 6 || terminal[gatilhoConfirmado].ficha == 7 || terminal[gatilhoConfirmado].ficha == 8 || terminal[gatilhoConfirmado].ficha == 9) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '5') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '5') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 10 || terminal[gatilhoConfirmado].ficha == 11 || terminal[gatilhoConfirmado].ficha == 12 || terminal[gatilhoConfirmado].ficha == 13) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '25') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '25') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 14 || terminal[gatilhoConfirmado].ficha == 15 || terminal[gatilhoConfirmado].ficha == 16) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '125') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '125') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 17 || terminal[gatilhoConfirmado].ficha == 18) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '500') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '500') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 19) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '1250') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '1250') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
         }
     } else if (terminal[gatilhoConfirmado].ficha == 20) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '5K') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '5K') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFicha = true;
                 break;
             }
@@ -657,89 +660,89 @@ function selecionaFicha() {
 
 function selecionaFichaEmpate() {
     if (estrategias.fichaEmpate == 1) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '0.2') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '0.2') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 2 || estrategias.fichaEmpate == 3 || estrategias.fichaEmpate == 4 || estrategias.fichaEmpate == 5) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '1') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '1') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 6 || estrategias.fichaEmpate == 7 || estrategias.fichaEmpate == 8 || estrategias.fichaEmpate == 9) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '5') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '5') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 10 || estrategias.fichaEmpate == 11 || estrategias.fichaEmpate == 12 || estrategias.fichaEmpate == 13) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '25') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '25') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 14 || estrategias.fichaEmpate == 15 || estrategias.fichaEmpate == 16) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '125') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '125') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 17 || estrategias.fichaEmpate == 18) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '500') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '500') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 19) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '1250') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '1250') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
         }
     } else if (estrategias.fichaEmpate == 20) {
-        for (let i = 0; i < document.getElementsByClassName(elementos.k).length; i++) {
-            if (document.getElementsByClassName(elementos.k)[i].textContent == '5K') {
-                click((Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().x)
-                    + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().width / 2)),
-                    (Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().y)
-                        + Math.trunc(document.getElementsByClassName(elementos.k)[i].getBoundingClientRect().height / 2)));
+        for (let i = 0; i < document.querySelector(elementos.k).children.length; i++) {
+            if (document.querySelector(elementos.k).children[i].textContent == '5K') {
+                click((Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().x)
+                    + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().width / 2)),
+                    (Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().y)
+                        + Math.trunc(document.querySelector(elementos.k).children[i].getBoundingClientRect().height / 2)));
                 achouFichaEmpate = true;
                 break;
             }
@@ -1007,10 +1010,10 @@ function confirmarGreen(resultado) {
 }
 
 function repetirAposta() {
-    click((Math.trunc(document.getElementsByClassName(elementos.k)[9].getBoundingClientRect().x)
-        + Math.trunc(document.getElementsByClassName(elementos.k)[9].getBoundingClientRect().width / 2)),
-        (Math.trunc(document.getElementsByClassName(elementos.k)[9].getBoundingClientRect().y)
-            + Math.trunc(document.getElementsByClassName(elementos.k)[9].getBoundingClientRect().height / 2)));
+    click((Math.trunc(document.querySelector(elementos.j).getBoundingClientRect().x)
+        + Math.trunc(document.querySelector(elementos.j).getBoundingClientRect().width / 2)),
+        (Math.trunc(document.querySelector(elementos.j).getBoundingClientRect().y)
+            + Math.trunc(document.querySelector(elementos.j).getBoundingClientRect().height / 2)));
 }
 
 function formarValorFichaSelecionada() {
@@ -1058,7 +1061,7 @@ function formarValorFichaSelecionada() {
 }
 
 function apostarVermelho() {
-    let elementoFicha = document.getElementsByClassName(elementos.k)[18];
+    let elementoFicha = document.getElementById(elementos.n);
     for (let i = 0; i < formarValorFichaSelecionada(); i++) {
         click((Math.trunc(elementoFicha.getBoundingClientRect().x)
             + Math.trunc(elementoFicha.getBoundingClientRect().width / 2)),
@@ -1068,7 +1071,7 @@ function apostarVermelho() {
 }
 
 function apostarAzul() {
-    let elementoFicha = document.getElementsByClassName(elementos.k)[15];
+    let elementoFicha = document.getElementById(elementos.l);
     for (let i = 0; i < formarValorFichaSelecionada(); i++) {
         click((Math.trunc(elementoFicha.getBoundingClientRect().x)
             + Math.trunc(elementoFicha.getBoundingClientRect().width / 2)),
@@ -1078,7 +1081,7 @@ function apostarAzul() {
 }
 
 function apostarEmpate() {
-    let elementoFicha = document.getElementsByClassName(elementos.k)[16];
+    let elementoFicha = document.getElementById(elementos.m);
     for (let i = 0; i < formarValorFichaSelecionada(); i++) {
         click((Math.trunc(elementoFicha.getBoundingClientRect().x)
             + Math.trunc(elementoFicha.getBoundingClientRect().width / 2)),
@@ -1088,15 +1091,15 @@ function apostarEmpate() {
 }
 
 function desfazerAposta() {
-    click((Math.trunc(document.getElementsByClassName(elementos.k)[0].getBoundingClientRect().x)
-        + Math.trunc(document.getElementsByClassName(elementos.k)[0].getBoundingClientRect().width / 2)),
-        (Math.trunc(document.getElementsByClassName(elementos.k)[0].getBoundingClientRect().y)
-            + Math.trunc(document.getElementsByClassName(elementos.k)[0].getBoundingClientRect().height / 2)));
+    click((Math.trunc(document.querySelector(elementos.i).getBoundingClientRect().x)
+        + Math.trunc(document.querySelector(elementos.i).getBoundingClientRect().width / 2)),
+        (Math.trunc(document.querySelector(elementos.i).getBoundingClientRect().y)
+            + Math.trunc(document.querySelector(elementos.i).getBoundingClientRect().height / 2)));
 }
 
 function valorBanca() {
 
-    let valorString = document.getElementsByClassName(elementos.q)[0].textContent.trim();
+    let valorString = document.querySelector(elementos.q).textContent.trim();
 
     if (valorString.includes(',') && valorString.includes('.')) {
         valorString = valorString.replace(/[^\d,.]/g, '')
@@ -1256,8 +1259,8 @@ function analisarBaccarat() {
         display = true;
     }
 
-    if (document.getElementsByClassName(elementos.f)[0] != undefined &&
-        isNaN(document.getElementsByClassName(elementos.f)[0].textContent)) {
+    if (document.getElementsByClassName(elementHist)[0] != undefined &&
+        isNaN(document.getElementsByClassName(elementHist)[0].textContent)) {
         clicarNoHistorico();
     }
 
@@ -1267,7 +1270,7 @@ function analisarBaccarat() {
 
         document.getElementById(elementos.t).textContent = 'APOSTANDO E CANCELANDO PRA MANTER ATIVIDADE NA MESA';
 
-    } else if (rodada == 0 && document.getElementsByClassName(elementos.f)[0] != undefined && !isNaN(document.getElementsByClassName(elementos.f)[0].textContent)) {
+    } else if (rodada == 0 && document.getElementsByClassName(elementHist)[0] != undefined && !isNaN(document.getElementsByClassName(elementHist)[0].textContent)) {
         document.getElementById(elementos.t).textContent = `BANCA R$ ${valorBanca()}  AGUARDANDO RODADA`;
         qtdHistAnotado = qtdHistAtual;
         rodada++;
@@ -1329,7 +1332,7 @@ function analisarBaccarat() {
         }
     }
 
-    if (document.getElementsByClassName(elementos.v).length > 0) {
+    if (document.querySelector(elementos.v) != null) {
         apostar();
     }
 
@@ -1591,8 +1594,8 @@ function definirProximaMesa() {
 }
 
 function fecharPagamentosLimites() {
-    if (document.getElementsByClassName(elementos.g)[8]) {
-        document.getElementsByClassName(elementos.g)[8].click();
+    if (document.querySelector(elementos.g)) {
+        document.querySelector(elementos.g).click();
     }
 }
 
@@ -1620,9 +1623,17 @@ setInterval(async () => {
         } else {
             fecharPagamentosLimites();
 
-            if (document.getElementsByClassName(elementos.f)[0] != undefined) {
+            if (buscarClasseHistoricoPorTexto("E") != null) {
+                elementHist = buscarClasseHistoricoPorTexto("E");
+            } else if (buscarClasseHistoricoPorTexto("J") != null) {
+                elementHist = buscarClasseHistoricoPorTexto("J");
+            } else if (buscarClasseHistoricoPorTexto("B") != null) {
+                elementHist = buscarClasseHistoricoPorTexto("B");
+            }
 
-                mesa = document.getElementsByClassName(elementos.x)[0].outerText.split('\n')[0];
+            if (document.getElementsByClassName(elementHist)[0] != undefined) {
+
+                mesa = document.querySelector(elementos.x).outerText.split('\n')[0];
 
                 if (load == 0) {
                     let dataMesa = await recuperarDados();
@@ -1664,7 +1675,7 @@ setInterval(async () => {
                 }
             }
 
-            if (document.getElementsByClassName(elementos.w).length > 1) {
+            if (document.querySelectorAll(elementos.w).length > 1) {
                 let dataMesa = await recuperarDados();
                 await carregarConfiguracao();
 
@@ -1677,7 +1688,7 @@ setInterval(async () => {
                     if (ociosidadeLobby >= 100) {
                         salvarDados();
                         createToast(`procurando mesa : ${mesa}`, 2000);
-                        let list = document.getElementsByClassName(elementos.w);
+                        let list = document.querySelectorAll(elementos.w);
                         for (let i = 0; i < list.length; i++) {
                             list[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
                             if (validarMesa(mesa, list[i].textContent)) {
@@ -1690,7 +1701,7 @@ setInterval(async () => {
                             createToast(`timer: ${contagemTimerMinutos}:${contagemTimerSegundos}`, 2000);
                         } else {
                             createToast(`procurando mesa : ${mesa}`, 2000);
-                            let list = document.getElementsByClassName(elementos.w);
+                            let list = document.querySelectorAll(elementos.w);
                             for (let i = 0; i < list.length; i++) {
                                 list[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 if (validarMesa(mesa, list[i].textContent)) {
@@ -1715,7 +1726,7 @@ function reset() {
 chrome.storage.onChanged.addListener(async (changes, areaName, namespace) => {
     if (areaName === 'local') {
         if (changes.hasOwnProperty('data')) {
-            if (document.getElementsByClassName(elementos.f)[0] != undefined) {
+            if (document.getElementsByClassName(elementHist)[0] != undefined) {
 
                 let dataMesa = await recuperarDados();
 
