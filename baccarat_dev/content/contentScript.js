@@ -308,23 +308,14 @@ function clicarInatividade() {
 }
 
 function buscarClasseHistoricoPorTexto(texto) {
-    // Passo 1: Encontra o span com o texto especificado
     const spanAlvo = Array.from(document.querySelectorAll('span'))
         .find(span => span.textContent.trim() === texto);
 
-    if (!spanAlvo) {
-        return null;
-    }
+    if (!spanAlvo) return null;
 
-    // Passo 2: Encontra o div pai que contém classes
-    const divPai = spanAlvo.closest('div[class]');
+    const divPai = spanAlvo.closest('div[class]')?.parentElement?.closest('div[class]');
 
-    if (!divPai) {
-        return null;
-    }
-
-    // Passo 3: Retorna apenas a PRIMEIRA classe (ex: "io_ip")
-    return divPai.className.split(' ')[0]; // Divide a string e pega o primeiro item
+    return divPai ? divPai.className.split(' ')[0] : null;
 }
 
 function clicarNoHistorico() {
@@ -335,8 +326,7 @@ function clicarNoHistorico() {
 }
 
 function defineCor(elemento) {
-
-    let cor = window.getComputedStyle(elemento).backgroundColor;
+    let cor = window.getComputedStyle(elemento.children[0]).backgroundColor;
 
     if (cor === 'rgb(45, 139, 232)') {
         return 'A';
@@ -374,8 +364,29 @@ function porcentagemEmpateBaccarat() {
     return calcularPorcentagem('E');
 }
 
+function getElementoNaSuaOrdem(posicaoDesejada) {
+    const totalLinhas = 6;
+    const totalColunas = 18;
+
+    const coluna = Math.floor(posicaoDesejada / totalLinhas);
+    const linha = posicaoDesejada % totalLinhas;
+
+    const indexPadrao = linha * totalColunas + coluna;
+
+    return document.getElementsByClassName(elementHist)[indexPadrao];
+}
+
 function tamanhoHistorico() {
-    return document.getElementsByClassName(elementHist).length;
+    let tamanho = 0;
+    for (let i = 0; i < 108; i++) {
+        if (getElementoNaSuaOrdem(i).textContent != '') {
+            tamanho++;
+        } else {
+            break;
+        }
+    }
+
+    return tamanho;
 }
 
 function listarHistoricoConfig(lista) {
@@ -388,35 +399,27 @@ function listarHistoricoConfig(lista) {
 }
 
 function listarHistorico() {
-    // Coleta todos os elementos
-    const elementos = document.getElementsByClassName(elementHist);
-    const total = elementos.length;
-    const linhas = 6;
-
-    // Calcula o número de colunas
-    const colunas = Math.ceil(total / linhas);
-
-    // Array para o resultado final
-    const resultado = [];
-
-    // Constrói a nova ordem coluna por coluna
-    for (let col = 0; col < colunas; col++) {
-        for (let lin = 0; lin < linhas; lin++) {
-            const indiceOriginal = lin * colunas + col;
-
-            // Evita índices inválidos se total não for múltiplo perfeito
-            if (indiceOriginal < total) {
-                const cor = defineCor(elementos[indiceOriginal]);
-                resultado.push(cor.concat("", elementos[indiceOriginal].textContent));
+    historico = [];
+    let historicoSelecionado = [];
+    if (historicoSelecionado.length == 0) {
+        for (let i = 0; i < 108; i++) {
+            let elemento = getElementoNaSuaOrdem(i);
+            if (elemento.textContent == '') {
+                break;
+            }
+            let cor = defineCor(elemento);
+            if (cor.concat("", elemento.textContent).length > 1) {
+                historicoSelecionado.push(cor.concat("", elemento.textContent));
             }
         }
     }
 
-    historico = resultado.reverse();
+    historico = listarHistoricoConfig(historicoSelecionado);
 }
 
 function confirmarAposta() {
     listarHistorico();
+    console.info('Historico', JSON.stringify(historico));
     let confirmacao = false;
     porcentagemAzul = parseInt(porcentagemAzulBaccarat());
     porcentagemVermelho = parseInt(porcentagemVermelhoBaccarat());
