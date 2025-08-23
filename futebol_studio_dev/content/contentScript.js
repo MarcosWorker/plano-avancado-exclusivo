@@ -2,6 +2,7 @@ let elementos = {};
 
 let estrategias = {
     tipoPosGain: 0,
+    galeVirtualCiclo: 0,
     galeVirtual: 0,
     galeAlternado: 0,
     galeAlternadoContagem: 0,
@@ -70,6 +71,7 @@ let valorDePerca = 0;
 let valorDeGanho = 0;
 let pararTudo = false;
 let apostaConfirmada = false;
+let contagemCartas = 0;
 
 function enviarMsgTelegram(msg) {
     try {
@@ -317,6 +319,9 @@ function listarHistorico() {
 
     historico = [];
     let hist = document.getElementsByClassName(`historyItem--47528 isDesktop--626a0 largeMobileIcon--7bcc0`);
+    if (hist[0].textContent == '') {
+        contagemCartas = 0;
+    }
     for (let i = 0; i < hist.length; i++) {
         if (document.getElementsByClassName(`historyItem--47528 isDesktop--626a0 largeMobileIcon--7bcc0`)[i].textContent != '') {
             historico.push(traduzir(document.getElementsByClassName(`historyItem--47528 isDesktop--626a0 largeMobileIcon--7bcc0`)[i].textContent));
@@ -386,6 +391,9 @@ function traduzir(elemento) {
 }
 
 function confirmarAposta() {
+    if (contagemCartas > 300) {
+        return false;
+    }
     let confirmacao = false;
     porcentagemCasa = parseInt(porcentagemCasaFS());
     porcentagemVisitante = parseInt(porcentagemVisitanteFS());
@@ -741,7 +749,18 @@ async function selecionaFichaEmpate() {
     }
 }
 
+function valorGaleVirtual() {
+    if (terminal[gatilhoConfirmado].contagemCiclo > 0 && parseInt(estrategias.galeVirtualCiclo) == 0) {
+        return 0;
+    } else {
+        return parseInt(estrategias.galeVirtual);
+    }
+}
+
 function valorCiclo() {
+    if (terminal[gatilhoConfirmado].contagemCiclo > 0 && parseInt(estrategias.galeVirtual) > 0 && parseInt(estrategias.galeVirtualCiclo) == 0) {
+        return (terminal[gatilhoConfirmado].contagemCiclo + (retornarGaleAnterior() * terminal[gatilhoConfirmado].contagemCiclo)) - parseInt(estrategias.galeVirtual);
+    }
     return terminal[gatilhoConfirmado].contagemCiclo > 0 ? terminal[gatilhoConfirmado].contagemCiclo + (retornarGaleAnterior() * terminal[gatilhoConfirmado].contagemCiclo) : 0;
 }
 
@@ -1468,7 +1487,7 @@ function fazerSurf() {
         apostaConfirmada = true;
         apostaGatilhoEncontrado = terminal[gatilhoConfirmado].aposta[0];
 
-        if (parseInt(estrategias.galeVirtual) > 0) {
+        if (valorGaleVirtual() > 0) {
             fazerGaleVirtual = true;
             if (fazerPosLoss()) {
                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
@@ -1536,11 +1555,12 @@ async function analisaFutebolStudio() {
         rodada++;
         listarHistorico();
     } else if (rodada == 1 && proximaRodada()) {
+        contagemCartas = contagemCartas + 2;
         if (confirmarAposta()) {
             apostaConfirmada = true;
             apostaGatilhoEncontrado = terminal[gatilhoConfirmado].aposta[0];
 
-            if (parseInt(estrategias.galeVirtual) > 0) {
+            if (valorGaleVirtual() > 0) {
                 fazerGaleVirtual = true;
                 if (fazerPosLoss()) {
                     if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
@@ -1598,6 +1618,7 @@ async function analisaFutebolStudio() {
             apostaConfirmada = false;
         }
     } else if (rodada > 1 && proximaRodada()) {
+        contagemCartas = contagemCartas + 2;
         if (confirmarGreen(historicoTotal[0])) {
             if (fazerGaleVirtual) {
                 terminal[gatilhoConfirmado].contagemPosGain++;
@@ -1679,8 +1700,8 @@ async function analisaFutebolStudio() {
                     document.getElementById(elementos.e10).textContent = 'AGUARDANDO SEQUENCIA DE EMPATE TERMINAR';
                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
                 } else {
-                    if (parseInt(estrategias.galeVirtual) > 0 && fazerGaleVirtual) {
-                        if (cicloGaleVirtual > parseInt(estrategias.galeVirtual)) {
+                    if (valorGaleVirtual() > 0 && fazerGaleVirtual) {
+                        if (cicloGaleVirtual > valorGaleVirtual()) {
                             fazerGaleVirtual = false;
                             if (fazerPosLoss()) {
                                 cicloGale++;
@@ -1698,10 +1719,11 @@ async function analisaFutebolStudio() {
 
                             } else {
                                 cicloGale++;
-                                cicloGaleVirtual == (parseInt(estrategias.galeVirtual) + 1) ? liberadoApostar = true : liberadoDobrarAposta = true;
+                                cicloGaleVirtual == (valorGaleVirtual() + 1) ? liberadoApostar = true : liberadoDobrarAposta = true;
                                 qtdHistAnotado = qtdHistAtual;
                                 rodada++;
                                 if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
+                                    ociosidade = 0;
                                     document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                                     enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                     document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
@@ -1765,6 +1787,7 @@ async function analisaFutebolStudio() {
                             qtdHistAnotado = qtdHistAtual;
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
+                                ociosidade = 0;
                                 document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                                 enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
@@ -1777,8 +1800,8 @@ async function analisaFutebolStudio() {
                     }
                 }
             } else {
-                if (parseInt(estrategias.galeVirtual) > 0 && fazerGaleVirtual) {
-                    if (cicloGaleVirtual > parseInt(estrategias.galeVirtual)) {
+                if (valorGaleVirtual() > 0 && fazerGaleVirtual) {
+                    if (cicloGaleVirtual > valorGaleVirtual()) {
                         fazerGaleVirtual = false;
                         if (fazerPosLoss()) {
                             cicloGale++;
@@ -1796,10 +1819,11 @@ async function analisaFutebolStudio() {
 
                         } else {
                             cicloGale++;
-                            cicloGaleVirtual == (parseInt(estrategias.galeVirtual) + 1) ? liberadoApostar = true : liberadoDobrarAposta = true;
+                            cicloGaleVirtual == (valorGaleVirtual() + 1) ? liberadoApostar = true : liberadoDobrarAposta = true;
                             qtdHistAnotado = qtdHistAtual;
                             rodada++;
                             if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
+                                ociosidade = 0;
                                 document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                                 enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                                 document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
@@ -1863,6 +1887,7 @@ async function analisaFutebolStudio() {
                         qtdHistAnotado = qtdHistAtual;
                         rodada++;
                         if (parseInt(estrategias.terminal[gatilhoConfirmado].ficha) > 0) {
+                            ociosidade = 0;
                             document.getElementById(elementos.e10).textContent = `APOSTANDO ${apostaGatilhoEncontrado} GALE ${posicaoGaleAtual()} CICLO ${terminal[gatilhoConfirmado].contagemCiclo} IA:${assertividade}% ${qtdEventos} EVENTOS`;
                             enviarMsgTelegram(`### APOSTANDO ###\n\n${mensagemTelegramGale(historicoTotal[0], posicaoGaleAtual(), terminal[gatilhoConfirmado].contagemCiclo)}`);
                             document.getElementById(elementos.e11).textContent = `CASA : ${porcentagemCasaFS()}% VISITANTE : ${porcentagemVisitanteFS()}% EMPATE : ${porcentagemEmpateFS()}%`;
@@ -2052,7 +2077,7 @@ setInterval(async () => {
                 }
 
                 ociosidade++;
-                if (ociosidade > 250 && !apostaConfirmada) {
+                if (ociosidade > 80 && !apostaConfirmada) {
                     liberarApostaOciosidade = true;
                     ociosidade = 0;
                 }
