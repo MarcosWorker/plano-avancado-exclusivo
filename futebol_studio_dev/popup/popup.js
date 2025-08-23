@@ -1,4 +1,5 @@
 let config = {
+    galeVirtualCiclo: 0,
     tipoPosGain: 0,
     galeVirtual: 0,
     galeAlternado: 0,
@@ -142,6 +143,9 @@ let txtFichaVisitantePorcentMinimoLimite = document.getElementById('txtFichaVisi
 
 let inputGaleVirtual = document.getElementById("inputGaleVirtual");
 let txtGaleVirtual = document.getElementById("txtGaleVirtual");
+
+let inputGaleVirtualCiclo = document.getElementById("inputGaleVirtualCiclo");
+let txtGaleVirtualCiclo = document.getElementById("txtGaleVirtualCiclo");
 
 let inputSurf = document.getElementById('inputSurf');
 let txtSurf = document.getElementById('txtSurf');
@@ -343,6 +347,14 @@ inputGaleVirtual.addEventListener("input", () => {
         txtGaleVirtual.textContent = `Aposta virtual`;
     } else {
         txtGaleVirtual.textContent = `Gale Virtual - ${inputGaleVirtual.value - 1}`;
+    }
+});
+
+inputGaleVirtualCiclo.addEventListener("input", () => {
+    if (inputGaleVirtualCiclo.value == 0) {
+        txtGaleVirtualCiclo.textContent = `Não fazer Gale virtual no ciclo`;
+    } else if (inputGaleVirtualCiclo.value == 1) {
+        txtGaleVirtualCiclo.textContent = `Fazer Gale virtual no ciclo`;
     }
 });
 
@@ -723,6 +735,7 @@ async function salvarLista() {
     config.visitantePorcentMaximoLimite = inputFichaVisitantePorcentMaximoLimite.value;
     config.visitantePorcentMinimoLimite = inputFichaVisitantePorcentMinimoLimite.value;
     config.galeVirtual = inputGaleVirtual.value;
+    config.galeVirtualCiclo = inputGaleVirtualCiclo.value;
     config.surf = inputSurf.value;
     config.esperarEmpate = inputEsperarEmpate.value;
     config.stopGain = inputGain.value;
@@ -840,6 +853,8 @@ function ocultarLogin() {
     txtFichaVisitantePorcentMinimoLimite.style.display = 'block';
     inputGaleVirtual.style.display = "block";
     txtGaleVirtual.style.display = "block";
+    inputGaleVirtualCiclo.style.display = "block";
+    txtGaleVirtualCiclo.style.display = "block";
     inputSurf.style.display = 'block';
     txtSurf.style.display = 'block';
     inputEsperarEmpate.style.display = 'block';
@@ -934,6 +949,8 @@ function ocultarConfig() {
     txtFichaVisitantePorcentMinimoLimite.style.display = 'none';
     inputGaleVirtual.style.display = "none";
     txtGaleVirtual.style.display = "none";
+    inputGaleVirtualCiclo.style.display = "none";
+    txtGaleVirtualCiclo.style.display = "none";
     inputSurf.style.display = 'none';
     txtSurf.style.display = 'none';
     inputEsperarEmpate.style.display = 'none';
@@ -1044,6 +1061,12 @@ function atualizaConfig(config) {
         txtGaleVirtual.textContent = `Gale Virtual - ${config.galeVirtual - 1}`;
     }
 
+    if (config.galeVirtualCiclo == 0) {
+        txtGaleVirtualCiclo.textContent = `Não fazer gale virtual no ciclo`;
+    } else if (config.galeVirtualCiclo == 1) {
+        txtGaleVirtualCiclo.textContent = `Fazer gale virtual no ciclo`;
+    }
+
     if (config.tipoPosGain == 0) {
         txtTipoPosGain.textContent = `Pos gain intercalado`;
     } else if (config.tipoPosGain == 1) {
@@ -1100,6 +1123,7 @@ function atualizaConfig(config) {
     inputFichaVisitantePorcentMinimoLimite.value = config.visitantePorcentMinimoLimite;
 
     inputGaleVirtual.value = config.galeVirtual;
+    inputGaleVirtualCiclo.value = config.galeVirtualCiclo;
     inputSurf.value = config.surf;
     inputEsperarEmpate.value = config.esperarEmpate;
     inputGain.value = config.stopGain;
