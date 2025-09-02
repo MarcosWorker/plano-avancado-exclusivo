@@ -23,7 +23,6 @@ let contagemErros = 0;
 let contagemConfirmacaoSolo = 0;
 let valorAntesDeAposta = 0;
 let valorDePerca = 0;
-let valorDeGanho = 0;
 let pararTudo = false;
 
 const accountPanel = '.account-panel';
@@ -614,8 +613,8 @@ function enviarMensagem(action, data) {
 }
 
 function fecharTutorial() {
-    if (document.getElementsByClassName(elementos.e1).length > 0 && document.getElementsByClassName(elementos.e2).length > 0) {
-        document.getElementsByClassName(elementos.e1)[0].click();
+    if (document.getElementsByClassName(elementos.e1)[1] != undefined && document.getElementsByClassName(elementos.e2)[0] != undefined) {
+        document.getElementsByClassName(elementos.e1)[1].click();
     }
 }
 
@@ -841,7 +840,7 @@ async function modoIA() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -883,7 +882,6 @@ async function modoIA() {
             } else if (rodada > 1) {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
-                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreenIA();
                     resetTelaRoleta();
@@ -967,7 +965,7 @@ async function modoQuentesFrios() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1012,7 +1010,6 @@ async function modoQuentesFrios() {
             } else if (rodada > 1) {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
-                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreenQuentesFrios();
                     resetTelaRoleta();
@@ -1099,7 +1096,7 @@ async function modoCarrossel() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1160,7 +1157,6 @@ async function modoCarrossel() {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await getContagem();
-                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreen(contagemStorage);
                     definirCicloNoGreen(contagemStorage);
@@ -1250,7 +1246,7 @@ async function modoSolo() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1310,7 +1306,6 @@ async function modoSolo() {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await getContagem();
-                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreen(contagemStorage);
                     definirCicloNoGreen(contagemStorage);
@@ -1419,7 +1414,7 @@ async function modoLobby() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1485,7 +1480,6 @@ async function modoLobby() {
 
                 if (confirmarGreen(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await getContagem();
-                    tirarDiferencaDeganho();
                     inserirTextoDisplay(`GANHOU`, 2);
                     definirMensagemDeGreen(contagemStorage);
                     definirCicloNoGreen(contagemStorage);
@@ -3120,23 +3114,11 @@ async function validarJogadasIa() {
 }
 
 function definirStopDePerca() {
-    let valorDeBanca = valorNumericoBanca();
-    if (valorAntesDeAposta > valorDeBanca && parseInt(configuracaoAtual.stop.loss) > 0) {
-        valorDePerca = valorDePerca + (valorAntesDeAposta - valorDeBanca);
+    if (valorAntesDeAposta > valorNumericoBanca() && parseInt(configuracaoAtual.stop.loss) > 0) {
+        valorDePerca = valorDePerca + (valorAntesDeAposta - valorNumericoBanca());
         if (parseFloat(configuracaoAtual.stop.loss) <= valorDePerca) {
             pararTudo = true;
-            createToast(`STOP DE PERDA ATINGIDO! Banca: R$ ${valorDeBanca} - Perca: R$ ${valorDePerca}`, 10000);
-        }
-    }
-}
-
-function tirarDiferencaDeganho() {
-    let valorDeBanca = valorNumericoBanca();
-    if (valorAntesDeAposta < valorDeBanca) {
-        valorDeGanho = (valorDeBanca - valorAntesDeAposta);
-        if (valorDePerca > 0) {
-            valorDePerca = (valorDePerca - valorDeGanho) > 0 ? (valorDePerca - valorDeGanho) : 0;
-            createToast(`VALOR DE PERCA ATUALIZADO PARA  R$ ${valorDePerca}.00`, 10000);
+            createToast(`STOP DE PERDA ATINGIDO! Banca: R$ ${valorNumericoBanca()} - Perca: R$ ${valorDePerca}`, 10000);
         }
     }
 }
@@ -3161,45 +3143,92 @@ async function executarApostaIA() {
             if (galeAtual == 0) {
                 valorAntesDeAposta = valorNumericoBanca();
             }
-            for (let i = 0; i < aposta.length; i++) {
-                switch (aposta[i]) {
-                    case "0": apostar0(); break;
-                    case "1": apostar1(); break;
-                    case "2": apostar2(); break;
-                    case "3": apostar3(); break;
-                    case "4": apostar4(); break;
-                    case "5": apostar5(); break;
-                    case "6": apostar6(); break;
-                    case "7": apostar7(); break;
-                    case "8": apostar8(); break;
-                    case "9": apostar9(); break;
-                    case "10": apostar10(); break;
-                    case "11": apostar11(); break;
-                    case "12": apostar12(); break;
-                    case "13": apostar13(); break;
-                    case "14": apostar14(); break;
-                    case "15": apostar15(); break;
-                    case "16": apostar16(); break;
-                    case "17": apostar17(); break;
-                    case "18": apostar18(); break;
-                    case "19": apostar19(); break;
-                    case "20": apostar20(); break;
-                    case "21": apostar21(); break;
-                    case "22": apostar22(); break;
-                    case "23": apostar23(); break;
-                    case "24": apostar24(); break;
-                    case "25": apostar25(); break;
-                    case "26": apostar26(); break;
-                    case "27": apostar27(); break;
-                    case "28": apostar28(); break;
-                    case "29": apostar29(); break;
-                    case "30": apostar30(); break;
-                    case "31": apostar31(); break;
-                    case "32": apostar32(); break;
-                    case "33": apostar33(); break;
-                    case "34": apostar34(); break;
-                    case "35": apostar35(); break;
-                    case "36": apostar36(); break;
+
+            if (aposta.length > 15 && galeAtual > 0) {
+                for (let i = 0; i < aposta.length; i++) {
+                    for (let x = 0; x < galeAtual * 3; x++) {
+                        switch (aposta[i]) {
+                            case "0": apostar0(); break;
+                            case "1": apostar1(); break;
+                            case "2": apostar2(); break;
+                            case "3": apostar3(); break;
+                            case "4": apostar4(); break;
+                            case "5": apostar5(); break;
+                            case "6": apostar6(); break;
+                            case "7": apostar7(); break;
+                            case "8": apostar8(); break;
+                            case "9": apostar9(); break;
+                            case "10": apostar10(); break;
+                            case "11": apostar11(); break;
+                            case "12": apostar12(); break;
+                            case "13": apostar13(); break;
+                            case "14": apostar14(); break;
+                            case "15": apostar15(); break;
+                            case "16": apostar16(); break;
+                            case "17": apostar17(); break;
+                            case "18": apostar18(); break;
+                            case "19": apostar19(); break;
+                            case "20": apostar20(); break;
+                            case "21": apostar21(); break;
+                            case "22": apostar22(); break;
+                            case "23": apostar23(); break;
+                            case "24": apostar24(); break;
+                            case "25": apostar25(); break;
+                            case "26": apostar26(); break;
+                            case "27": apostar27(); break;
+                            case "28": apostar28(); break;
+                            case "29": apostar29(); break;
+                            case "30": apostar30(); break;
+                            case "31": apostar31(); break;
+                            case "32": apostar32(); break;
+                            case "33": apostar33(); break;
+                            case "34": apostar34(); break;
+                            case "35": apostar35(); break;
+                            case "36": apostar36(); break;
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < aposta.length; i++) {
+                    switch (aposta[i]) {
+                        case "0": apostar0(); break;
+                        case "1": apostar1(); break;
+                        case "2": apostar2(); break;
+                        case "3": apostar3(); break;
+                        case "4": apostar4(); break;
+                        case "5": apostar5(); break;
+                        case "6": apostar6(); break;
+                        case "7": apostar7(); break;
+                        case "8": apostar8(); break;
+                        case "9": apostar9(); break;
+                        case "10": apostar10(); break;
+                        case "11": apostar11(); break;
+                        case "12": apostar12(); break;
+                        case "13": apostar13(); break;
+                        case "14": apostar14(); break;
+                        case "15": apostar15(); break;
+                        case "16": apostar16(); break;
+                        case "17": apostar17(); break;
+                        case "18": apostar18(); break;
+                        case "19": apostar19(); break;
+                        case "20": apostar20(); break;
+                        case "21": apostar21(); break;
+                        case "22": apostar22(); break;
+                        case "23": apostar23(); break;
+                        case "24": apostar24(); break;
+                        case "25": apostar25(); break;
+                        case "26": apostar26(); break;
+                        case "27": apostar27(); break;
+                        case "28": apostar28(); break;
+                        case "29": apostar29(); break;
+                        case "30": apostar30(); break;
+                        case "31": apostar31(); break;
+                        case "32": apostar32(); break;
+                        case "33": apostar33(); break;
+                        case "34": apostar34(); break;
+                        case "35": apostar35(); break;
+                        case "36": apostar36(); break;
+                    }
                 }
             }
         }
