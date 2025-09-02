@@ -23,7 +23,6 @@ let contagemErros = 0;
 let contagemConfirmacaoSolo = 0;
 let valorAntesDeAposta = 0;
 let valorDePerca = 0;
-let valorDeGanho = 0;
 let pararTudo = false;
 
 const accountPanel = '.account-panel';
@@ -607,8 +606,8 @@ function m(action, data) {
 }
 
 function n() {
-    if (document.getElementsByClassName(elementos.e1).length > 0 && document.getElementsByClassName(elementos.e2).length > 0) {
-        document.getElementsByClassName(elementos.e1)[0].click();
+    if (document.getElementsByClassName(elementos.e1)[1] != undefined && document.getElementsByClassName(elementos.e2)[0] != undefined) {
+        document.getElementsByClassName(elementos.e1)[1].click();
     }
 }
 
@@ -835,7 +834,7 @@ async function z() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -876,7 +875,6 @@ async function z() {
             } else if (rodada > 1) {
 
                 if (ap(aposta, sequenciaAtual[0])) {
-                    wyzh();
                     v(`GANHOU`, 2);
                     ca();
                     ah();
@@ -960,7 +958,7 @@ async function aa() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1005,7 +1003,6 @@ async function aa() {
             } else if (rodada > 1) {
 
                 if (ap(aposta, sequenciaAtual[0])) {
-                    wyzh();
                     v(`GANHOU`, 2);
                     bz();
                     ah();
@@ -1092,7 +1089,7 @@ async function ab() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1153,7 +1150,6 @@ async function ab() {
 
                 if (ap(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await cq();
-                    wyzh();
                     v(`GANHOU`, 2);
                     cb(contagemStorage);
                     cc(contagemStorage);
@@ -1243,7 +1239,7 @@ async function ac() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1303,7 +1299,6 @@ async function ac() {
 
                 if (ap(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await cq();
-                    wyzh();
                     v(`GANHOU`, 2);
                     cb(contagemStorage);
                     cc(contagemStorage);
@@ -1411,7 +1406,7 @@ async function ad() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[4].click();
+            document.getElementsByClassName(elementos.e16)[3].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1475,7 +1470,6 @@ async function ad() {
 
                 if (ap(aposta, sequenciaAtual[0])) {
                     let contagemStorage = await cq();
-                    wyzh();
                     v(`GANHOU`, 2);
                     cb(contagemStorage);
                     cc(contagemStorage);
@@ -3040,24 +3034,11 @@ async function bs() {
 }
 
 function wyz() {
-    let valorDeBanca = o();
-    if (valorAntesDeAposta > valorDeBanca && parseInt(configuracaoAtual.stop.loss) > 0) {
-        valorDePerca = valorDePerca + (valorAntesDeAposta - valorDeBanca);
-        console.info(`Valor de perda atualizado: R$ ${valorDePerca}`);
+    if (valorAntesDeAposta > o() && parseInt(configuracaoAtual.stop.loss) > 0) {
+        valorDePerca = valorDePerca + (valorAntesDeAposta - o());
         if (parseFloat(configuracaoAtual.stop.loss) <= valorDePerca) {
             pararTudo = true;
-            e(`STOP DE PERDA ATINGIDO! Banca: R$ ${valorDeBanca} - Perca: R$ ${valorDePerca}`, 10000);
-        }
-    }
-}
-
-function wyzh() {
-    let valorDeBanca = o();
-    if (valorAntesDeAposta > valorDeBanca && parseInt(configuracaoAtual.stop.loss) > 0) {
-        valorDePerca = valorDePerca + (valorAntesDeAposta - valorDeBanca);
-        if (parseFloat(configuracaoAtual.stop.loss) <= valorDePerca) {
-            pararTudo = true;
-            e(`STOP DE PERDA ATINGIDO! Banca: R$ ${valorDeBanca} - Perca: R$ ${valorDePerca}`, 10000);
+            e(`STOP DE PERDA ATINGIDO! Banca: R$ ${o()} - Perca: R$ ${valorDePerca}`, 10000);
         }
     }
 }
@@ -3081,45 +3062,91 @@ async function bt() {
             if (galeAtual == 0) {
                 valorAntesDeAposta = o();
             }
-            for (let i = 0; i < aposta.length; i++) {
-                switch (aposta[i]) {
-                    case "0": cy(); break;
-                    case "1": dl(); break;
-                    case "2": dm(); break;
-                    case "3": dn(); break;
-                    case "4": dp(); break;
-                    case "5": dq(); break;
-                    case "6": dr(); break;
-                    case "7": ds(); break;
-                    case "8": dt(); break;
-                    case "9": du(); break;
-                    case "10": dv(); break;
-                    case "11": dw(); break;
-                    case "12": dx(); break;
-                    case "13": dy(); break;
-                    case "14": dz(); break;
-                    case "15": ea(); break;
-                    case "16": eb(); break;
-                    case "17": ec(); break;
-                    case "18": ed(); break;
-                    case "19": ee(); break;
-                    case "20": ef(); break;
-                    case "21": eg(); break;
-                    case "22": eh(); break;
-                    case "23": ei(); break;
-                    case "24": ej(); break;
-                    case "25": ek(); break;
-                    case "26": el(); break;
-                    case "27": em(); break;
-                    case "28": en(); break;
-                    case "29": eo(); break;
-                    case "30": ep(); break;
-                    case "31": eq(); break;
-                    case "32": er(); break;
-                    case "33": es(); break;
-                    case "34": et(); break;
-                    case "35": eu(); break;
-                    case "36": ev(); break;
+            if (aposta.length > 15 && galeAtual > 0) {
+                for (let i = 0; i < aposta.length; i++) {
+                    for (let x = 0; x < galeAtual * 3; x++) {
+                        switch (aposta[i]) {
+                            case "0": cy(); break;
+                            case "1": dl(); break;
+                            case "2": dm(); break;
+                            case "3": dn(); break;
+                            case "4": dp(); break;
+                            case "5": dq(); break;
+                            case "6": dr(); break;
+                            case "7": ds(); break;
+                            case "8": dt(); break;
+                            case "9": du(); break;
+                            case "10": dv(); break;
+                            case "11": dw(); break;
+                            case "12": dx(); break;
+                            case "13": dy(); break;
+                            case "14": dz(); break;
+                            case "15": ea(); break;
+                            case "16": eb(); break;
+                            case "17": ec(); break;
+                            case "18": ed(); break;
+                            case "19": ee(); break;
+                            case "20": ef(); break;
+                            case "21": eg(); break;
+                            case "22": eh(); break;
+                            case "23": ei(); break;
+                            case "24": ej(); break;
+                            case "25": ek(); break;
+                            case "26": el(); break;
+                            case "27": em(); break;
+                            case "28": en(); break;
+                            case "29": eo(); break;
+                            case "30": ep(); break;
+                            case "31": eq(); break;
+                            case "32": er(); break;
+                            case "33": es(); break;
+                            case "34": et(); break;
+                            case "35": eu(); break;
+                            case "36": ev(); break;
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < aposta.length; i++) {
+                    switch (aposta[i]) {
+                        case "0": cy(); break;
+                        case "1": dl(); break;
+                        case "2": dm(); break;
+                        case "3": dn(); break;
+                        case "4": dp(); break;
+                        case "5": dq(); break;
+                        case "6": dr(); break;
+                        case "7": ds(); break;
+                        case "8": dt(); break;
+                        case "9": du(); break;
+                        case "10": dv(); break;
+                        case "11": dw(); break;
+                        case "12": dx(); break;
+                        case "13": dy(); break;
+                        case "14": dz(); break;
+                        case "15": ea(); break;
+                        case "16": eb(); break;
+                        case "17": ec(); break;
+                        case "18": ed(); break;
+                        case "19": ee(); break;
+                        case "20": ef(); break;
+                        case "21": eg(); break;
+                        case "22": eh(); break;
+                        case "23": ei(); break;
+                        case "24": ej(); break;
+                        case "25": ek(); break;
+                        case "26": el(); break;
+                        case "27": em(); break;
+                        case "28": en(); break;
+                        case "29": eo(); break;
+                        case "30": ep(); break;
+                        case "31": eq(); break;
+                        case "32": er(); break;
+                        case "33": es(); break;
+                        case "34": et(); break;
+                        case "35": eu(); break;
+                        case "36": ev(); break;
+                    }
                 }
             }
         }
