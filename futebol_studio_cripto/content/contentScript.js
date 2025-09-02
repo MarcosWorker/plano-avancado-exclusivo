@@ -2077,7 +2077,7 @@ setInterval(async () => {
                 }
 
                 ociosidade++;
-                if (ociosidade > 80 && !apostaConfirmada) {
+                if (ociosidade > 160 && !apostaConfirmada) {
                     liberarApostaOciosidade = true;
                     ociosidade = 0;
                 }
