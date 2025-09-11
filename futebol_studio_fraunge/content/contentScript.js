@@ -1103,7 +1103,6 @@ async function apostar() {
                 if (parseInt(estrategias.galeCancelado) > 0) {
                     await new Promise(resolve => setTimeout(resolve, 200));
                     await repetirAposta();
-                    return;
                 } else {
                     for (let i = 0; i < 2; i++) {
                         await new Promise(resolve => setTimeout(resolve, 200));
