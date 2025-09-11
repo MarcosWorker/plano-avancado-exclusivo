@@ -1103,11 +1103,14 @@ async function apostar() {
                 if (parseInt(estrategias.galeCancelado) > 0) {
                     await new Promise(resolve => setTimeout(resolve, 200));
                     await repetirAposta();
+                    return;
+                } else {
+                    for (let i = 0; i < 2; i++) {
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                        await repetirAposta();
+                    }
                 }
-                for (let i = 0; i < 2; i++) {
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                    await repetirAposta();
-                }
+
             }
         }
 
@@ -1467,10 +1470,11 @@ function mensagemTelegramGale(resultado, galeAtual, cicloAtual) {
     );
 }
 
-function mensagemTelegramGreen() {
+function mensagemTelegramGreen(ultimoResultado) {
     return (
         `⚡️ *GATILHO*: ${JSON.stringify(terminal[gatilhoConfirmado].gatilho)}\n` +
         `🎯 *APOSTA*: ${JSON.stringify(terminal[gatilhoConfirmado].aposta)}\n` +
+        `🎯 *ULTIMO RESULTADO*: ${ultimoResultado}\n` +
         `💰 *FICHA*: ${valorFicha(terminal[gatilhoConfirmado].ficha)}\n` +
         `🔁 *GALE*: ${JSON.stringify(terminal[gatilhoConfirmado].gale)}\n` +
         `🔄 *CICLO*: ${JSON.stringify(terminal[gatilhoConfirmado].ciclo)}\n` +
@@ -1486,10 +1490,11 @@ function mensagemTelegramGreen() {
     );
 }
 
-function mensagemTelegramDadosRed() {
+function mensagemTelegramDadosRed(ultimoResultado) {
     return (
         `⚡️ *GATILHO*: ${JSON.stringify(terminal[gatilhoConfirmado].gatilho)}\n` +
         `🎯 *APOSTA*: ${JSON.stringify(terminal[gatilhoConfirmado].aposta)}\n` +
+        `🎯 *ULTIMO RESULTADO*: ${ultimoResultado}\n` +
         `💰 *FICHA*: ${valorFicha(terminal[gatilhoConfirmado].ficha)}\n` +
         `🔁 *GALE*: ${JSON.stringify(terminal[gatilhoConfirmado].gale)}\n` +
         `🔄 *CICLO*: ${JSON.stringify(terminal[gatilhoConfirmado].ciclo)}\n` +
@@ -1649,12 +1654,12 @@ async function analisaFutebolStudio() {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosGain = 0;
                     terminal[gatilhoConfirmado].contagemPosLoss = 0;
-                    enviarMsgTelegram(`✅✅✅ GREEN FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen(historicoTotal[0])}`);
                     atualizarHistorico(`🟩GREEN FAKE🟩 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN FAKE';
                 } else {
                     fazerPosGainGreen();
-                    enviarMsgTelegram(`✅✅✅ GREEN VIRTUAL \nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN VIRTUAL \nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen(historicoTotal[0])}`);
                     atualizarHistorico(`🟩GREEN VIRTUAL🟩 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN VIRTUAL';
                 }
@@ -1673,7 +1678,7 @@ async function analisaFutebolStudio() {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosGain = 0;
                     terminal[gatilhoConfirmado].contagemPosLoss = 0;
-                    enviarMsgTelegram(`✅✅✅ GREEN FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen(historicoTotal[0])}`);
                     atualizarHistorico(`🟩GREEN FAKE🟩 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN FAKE';
                 } else {
@@ -1699,7 +1704,7 @@ async function analisaFutebolStudio() {
                     }
 
                     fazerPosGainGreen();
-                    enviarMsgTelegram(`✅✅✅ GREEN REAL \nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen()}`);
+                    enviarMsgTelegram(`✅✅✅ GREEN REAL \nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramGreen(historicoTotal[0])}`);
                     atualizarHistorico(`🟩GREEN REAL🟩 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'GREEN';
                 }
@@ -1927,11 +1932,11 @@ async function analisaFutebolStudio() {
             if (fazerGaleVirtual) {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosLoss++;
-                    enviarMsgTelegram(`❌❌❌ RED FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed(historicoTotal[0])}`);
                     atualizarHistorico(`🟥RED FAKE🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED FAKE';
                 } else {
-                    enviarMsgTelegram(`❌❌❌ RED VIRTUAL\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED VIRTUAL\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed(historicoTotal[0])}`);
                     atualizarHistorico(`🟥RED VIRTUAL🟥 ${dataHora()} : GALE VIRTUAL ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED VIRTUAL';
                     fazerPosGainRed();
@@ -1949,7 +1954,7 @@ async function analisaFutebolStudio() {
             } else {
                 if (fazerPosLoss()) {
                     terminal[gatilhoConfirmado].contagemPosLoss++;
-                    enviarMsgTelegram(`❌❌❌ RED FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED FAKE\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed(historicoTotal[0])}`);
                     atualizarHistorico(`🟥RED FAKE🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED FAKE';
                 } else {
@@ -1961,7 +1966,7 @@ async function analisaFutebolStudio() {
                     }
                     contagemLoss++;
                     definirStopDePerca();
-                    enviarMsgTelegram(`❌❌❌ RED REAL\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed()}`);
+                    enviarMsgTelegram(`❌❌❌ RED REAL\nG${rodada - 2} C${terminal[gatilhoConfirmado].contagemCiclo}\n\n${mensagemTelegramDadosRed(historicoTotal[0])}`);
                     atualizarHistorico(`🟥RED🟥 ${dataHora()} : GALE ${posicaoGaleAtual()} ${JSON.stringify(terminal[gatilhoConfirmado])} PORCENTAGEM CASA : ${porcentagemCasa}% PORCENTAGEM VISITANTE : ${porcentagemVisitante}% RESULTADO : ${historicoTotal[0]} IA:${assertividade}% ${qtdEventos} EVENTOS / BANCA : R$ ${valorBanca()}`);
                     document.getElementById(elementos.e10).textContent = 'RED';
                 }
