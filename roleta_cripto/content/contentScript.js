@@ -814,7 +814,7 @@ async function y() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -944,7 +944,7 @@ async function z() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1093,7 +1093,7 @@ async function aa() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1260,7 +1260,7 @@ async function ab() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
