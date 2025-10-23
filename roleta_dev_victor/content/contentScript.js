@@ -841,7 +841,7 @@ async function modoIA() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -966,7 +966,7 @@ async function modoQuentesFrios() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1097,7 +1097,7 @@ async function modoCarrossel() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1247,7 +1247,7 @@ async function modoSolo() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
@@ -1415,7 +1415,7 @@ async function modoLobby() {
         }
 
         if (document.getElementsByClassName(elementos.e15).length == 12 || document.getElementsByClassName(elementos.e15).length == 10) {
-            document.getElementsByClassName(elementos.e16)[3].click();
+            document.getElementsByClassName(elementos.e16)[4].click();
         }
 
         if (document.getElementsByClassName(elementos.e17).length == 1 || document.getElementsByClassName(elementos.e18).length == 1) {
