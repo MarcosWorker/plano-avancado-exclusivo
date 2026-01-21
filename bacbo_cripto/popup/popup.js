@@ -1,6 +1,7 @@
 let config = {
     galeAlternado: 0,
     galeAlternadoContagem: 0,
+    repetirApostaGale: 0,
     galeVirtual: 0,
     surf: 0,
     historico: 0,
@@ -153,6 +154,9 @@ let txtGaleAlternado = document.getElementById('txtGaleAlternado');
 let inputGaleAlternadoContagem = document.getElementById('inputGaleAlternadoContagem');
 let txtGaleAlternadoContagem = document.getElementById('txtGaleAlternadoContagem');
 
+let inputRepetirApostaGale = document.getElementById('inputRepetirApostaGale');
+let txtRepetirApostaGale = document.getElementById('txtRepetirApostaGale');
+
 let btnSalvar = document.getElementById('btnSalvar');
 
 btnStatus.addEventListener("click", () => {
@@ -283,7 +287,7 @@ inputGaleAlternado.addEventListener("input", () => {
     if (inputGaleAlternado.value == 0) {
         txtGaleAlternado.textContent = `Não alternar aposta no gale`;
     } else if (inputGaleAlternado.value == 1) {
-        txtGaleAlternado.textContent = `Alternar aposta a partir do gale 5`;
+        txtGaleAlternado.textContent = `Alternar aposta a partir do gale 3`;
     } else if (inputGaleAlternado.value == 2) {
         txtGaleAlternado.textContent = `Gale com alternância inteligente`;
     }
@@ -296,6 +300,14 @@ inputGaleAlternadoContagem.addEventListener("input", () => {
         txtGaleAlternadoContagem.textContent = `Alternar estrategia de alternancia depois de ${inputGaleAlternadoContagem.value} green`;
     } else if (inputGaleAlternadoContagem.value > 1) {
         txtGaleAlternadoContagem.textContent = `Alternar estrategia de alternancia depois de ${inputGaleAlternadoContagem.value} greens`;
+    }
+});
+
+inputRepetirApostaGale.addEventListener("input", () => {
+    if (inputRepetirApostaGale.value == 0) {
+        txtRepetirApostaGale.textContent = `Não repetir aposta no gale`;
+    } else if (inputRepetirApostaGale.value > 0) {
+        txtRepetirApostaGale.textContent = `Repetir aposta no gale ${inputRepetirApostaGale.value}`;
     }
 });
 
@@ -543,6 +555,7 @@ async function salvarLista() {
     config.chat = chatEdit.value;
     config.galeAlternado = inputGaleAlternado.value;
     config.galeAlternadoContagem = inputGaleAlternadoContagem.value;
+    config.repetirApostaGale = inputRepetirApostaGale.value;
 
     let retornoChrome = await getChromeStorage("liberacao");
 
@@ -655,6 +668,8 @@ function ocultarLogin() {
     txtGaleAlternado.style.display = 'block';
     inputGaleAlternadoContagem.style.display = 'block';
     txtGaleAlternadoContagem.style.display = 'block';
+    inputRepetirApostaGale.style.display = 'block';
+    txtRepetirApostaGale.style.display = 'block';
     btnSalvar.style.display = 'block';
     gatilho.style.display = 'block';
     aposta.style.display = 'block';
@@ -736,6 +751,8 @@ function ocultarConfig() {
     txtGaleAlternado.style.display = 'none';
     inputGaleAlternadoContagem.style.display = 'none';
     txtGaleAlternadoContagem.style.display = 'none';
+    inputRepetirApostaGale.style.display = 'none';
+    txtRepetirApostaGale.style.display = 'none';
     btnSalvar.style.display = 'none';
     gatilho.style.display = 'none';
     aposta.style.display = 'none';
@@ -819,7 +836,7 @@ function atualizaConfig(config) {
     if (config.galeAlternado == 0) {
         txtGaleAlternado.textContent = `Não alternar aposta no gale`;
     } else if (config.galeAlternado == 1) {
-        txtGaleAlternado.textContent = `Alternar aposta a partir do gale 5`;
+        txtGaleAlternado.textContent = `Alternar aposta a partir do gale 3`;
     } else if (config.galeAlternado == 2) {
         txtGaleAlternado.textContent = `Gale com alternância inteligente`;
     }
@@ -830,6 +847,12 @@ function atualizaConfig(config) {
         txtGaleAlternadoContagem.textContent = `Alternar estrategia de alternancia depois de ${config.galeAlternadoContagem} green`;
     } else if (config.galeAlternadoContagem > 1) {
         txtGaleAlternadoContagem.textContent = `Alternar estrategia de alternancia depois de ${config.galeAlternadoContagem} greens`;
+    }
+
+    if (config.repetirApostaGale == 0) {
+        txtRepetirApostaGale.textContent = `Não repetir aposta no gale`;
+    } else if (config.repetirApostaGale > 1) {
+        txtRepetirApostaGale.textContent = `Repetir aposta no gale ${config.repetirApostaGale}`;
     }
 
     inputIaMaximo.value = config.iaMaximo;
@@ -856,6 +879,7 @@ function atualizaConfig(config) {
     inputGaleVirtual.value = config.galeVirtual;
     inputGaleAlternado.value = config.galeAlternado;
     inputGaleAlternadoContagem.value = config.galeAlternadoContagem;
+    inputRepetirApostaGale.value = config.repetirApostaGale;
     tokenEdit.value = config.token;
     chatEdit.value = config.chat;
     config = config;
@@ -936,7 +960,6 @@ async function load() {
                     senhaLiberacao.textContent = `Senha : ${data.usuario.senha}`;
 
                     let dataConfig = await alksjduew(data.usuario.email, data.usuario.senha, data.usuario.id, 'bot_teste_editado');
-
                     atualizaConfig(dataConfig);
                 } else {
                     zerarUsuario();

@@ -1955,7 +1955,7 @@ async function analisaFutebolStudio() {
         }
     }
 
-    if (document.getElementsByClassName(`wrapper--8b249`).length > 0) {
+    if (document.getElementsByClassName(`wrapper--59090`).length > 0) {
         await apostar();
     }
 

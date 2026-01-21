@@ -1,6 +1,7 @@
 let estrategias = {
     galeAlternado: 0,
     galeAlternadoContagem: 0,
+    repetirApostaGale: 0,
     galeVirtual: 0,
     historico: 0,
     iaMinimo: 0,
@@ -336,6 +337,9 @@ function confirmarAposta() {
 
 function validarMensagemGaleVirtual() {
     if (parseInt(estrategias.galeVirtual) > 0 && parseInt(estrategias.galeVirtual) > contagemGaleVirtual) {
+        if (rodada > 1) {
+            contagemGaleVirtual++;
+        }
         return true;
     } else {
         return false;
@@ -633,9 +637,16 @@ async function apostar() {
         if (!fazerGaleVirtual()) {
 
             if (estrategias.terminal[gatilhoConfirmado].ficha > 0) {
+
+                if (parseInt(estrategias.repetirApostaGale) > 0 && galeAtual == parseInt(estrategias.repetirApostaGale)) {
+                    await repetirAposta();
+                    liberadoDobrarAposta = false;
+                    return;
+                }
+
                 if (parseInt(estrategias.galeAlternado) == 1) {
 
-                    if (galeAtual > 4) {
+                    if (galeAtual > 2) {
                         if (apostaGatilhoEncontrado === 'A') {
 
                             const numRepeticoes = galeAtual;
@@ -912,7 +923,7 @@ function confirmarGreen(resultado) {
         return false;
     } else {
         if (parseInt(estrategias.galeAlternado) == 1) {
-            if (posicaoGaleAtual() >= 4) {
+            if (posicaoGaleAtual() >= 2) {
                 if (resultado[0] != 'E') {
                     if (apostaGatilhoEncontrado === 'A') {
                         apostaGatilhoEncontrado = 'V';
@@ -1076,6 +1087,7 @@ async function analisarBacbo() {
                     enviarMsgTelegram(`FAZENDO APOSTA VIRTUAL ${apostaGatilhoEncontrado}`);
                     document.getElementById('bacbo').textContent = `FAZENDO APOSTA VIRTUAL ${apostaGatilhoEncontrado}`;
                 } else {
+
                     if (estrategias.terminal[gatilhoConfirmado].ficha > 0) {
                         enviarMsgTelegram(`APOSTANDO ${apostaGatilhoEncontrado}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
                         document.getElementById('bacbo').textContent = `APOSTANDO ${apostaGatilhoEncontrado} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
@@ -1150,30 +1162,35 @@ async function analisarBacbo() {
 
         } else if (fazerGale()) {
 
-            if (historico[0][0] == 'E') {
-                if (apostaGatilhoEncontrado.length == 1) {
-                    apostaGatilhoEncontrado = 'X' + apostaGatilhoEncontrado;
-                }
-                qtdHistAnotado = qtdHistAtual;
-                document.getElementById('bacbo').textContent = 'AGUARDANDO SEQUENCIA DE EMPATE TERMINAR';
-            } else {
-
-                if (fazerPosLoss()) {
-                    if (estrategias.terminal[gatilhoConfirmado].ficha > 0) {
-                        document.getElementById('bacbo').textContent = `POS LOSS ${apostaGatilhoEncontrado} GALE ${rodada - 1} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                        enviarMsgTelegram(`POS LOSS ${apostaGatilhoEncontrado}\nGALE ${rodada - 1}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
-                    } else {
-                        document.getElementById('bacbo').textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${rodada - 1} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
-                        enviarMsgTelegram(`SIMULANDO APOSTA EM ${apostaGatilhoEncontrado}\nGALE ${rodada - 1}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
-                    }
-
-                    cicloGale++;
-                    qtdHistAnotado = qtdHistAtual;
-                    rodada++;
+            if (fazerPosLoss()) {
+                if (estrategias.terminal[gatilhoConfirmado].ficha > 0) {
+                    document.getElementById('bacbo').textContent = `POS LOSS ${apostaGatilhoEncontrado} GALE ${rodada - 1} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
+                    enviarMsgTelegram(`POS LOSS ${apostaGatilhoEncontrado}\nGALE ${rodada - 1}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
                 } else {
-                    if (validarMensagemGaleVirtual()) {
-                        enviarMsgTelegram(`FAZENDO GALE VIRTUAL ${apostaGatilhoEncontrado}`);
-                        document.getElementById('bacbo').textContent = `FAZENDO GALE VIRTUAL ${apostaGatilhoEncontrado}`;
+                    document.getElementById('bacbo').textContent = `SIMULANDO APOSTA EM ${apostaGatilhoEncontrado} GALE ${rodada - 1} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
+                    enviarMsgTelegram(`SIMULANDO APOSTA EM ${apostaGatilhoEncontrado}\nGALE ${rodada - 1}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
+                }
+
+                cicloGale++;
+                qtdHistAnotado = qtdHistAtual;
+                rodada++;
+            } else {
+                if (validarMensagemGaleVirtual()) {
+                    enviarMsgTelegram(`FAZENDO GALE VIRTUAL ${apostaGatilhoEncontrado}`);
+                    document.getElementById('bacbo').textContent = `FAZENDO GALE ${rodada - 1} VIRTUAL ${apostaGatilhoEncontrado}`;
+                } else {
+
+                    if (parseInt(estrategias.galeVirtual) > 0 && parseInt(estrategias.galeVirtual) == contagemGaleVirtual) {
+                        contagemGaleVirtual++;
+                        if (estrategias.terminal[gatilhoConfirmado].ficha > 0) {
+                            enviarMsgTelegram(`APOSTANDO ${apostaGatilhoEncontrado}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
+                            document.getElementById('bacbo').textContent = `APOSTANDO ${apostaGatilhoEncontrado} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
+                        } else {
+                            enviarMsgTelegram(`SIMULANDO APOSTA ${apostaGatilhoEncontrado}\n${definirTextoCiclo()}\nIA:${assertividade}%\n${qtdEventos} EVENTOS`);
+                            document.getElementById('bacbo').textContent = `SIMULANDO APOSTA ${apostaGatilhoEncontrado} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
+                        }
+                        aguardandoGaleVirtual ? liberadoApostar = true : liberadoDobrarAposta = true;
+                        cicloGale--;
                     } else {
                         if (estrategias.terminal[gatilhoConfirmado].ficha > 0) {
                             document.getElementById('bacbo').textContent = `APOSTANDO ${apostaGatilhoEncontrado} ${rodada - 1 == 0 ? `` : `GALE ${rodada - 1}`} ${definirTextoCiclo()} IA:${assertividade}% ${qtdEventos} EVENTOS`;
@@ -1185,11 +1202,12 @@ async function analisarBacbo() {
                         aguardandoGaleVirtual ? liberadoApostar = true : liberadoDobrarAposta = true;
                         rodada++;
                     }
-                    cicloGale++;
-                    qtdHistAnotado = qtdHistAtual;
                 }
-
+                cicloGale++;
+                qtdHistAnotado = qtdHistAtual;
             }
+
+
         } else {
             if (fazerPosLoss()) {
                 enviarMsgTelegram(`🟥RED FAKE🟥 ${dataHora()}\nGALE ${posicaoGaleAtual()}\n${definirTextoCiclo()}\n${JSON.stringify(estrategias.terminal[gatilhoConfirmado])}\nPORCENTAGEM AZUL : ${porcentagemAzul}%\nPORCENTAGEM VERMELHO : ${porcentagemVermelho}%\nRESULTADO : ${historico[0]}\nIA:${assertividade}%\n${qtdEventos} EVENTOS\n\nBANCA R$ ${valorBanca()}`);
@@ -1222,7 +1240,7 @@ async function analisarBacbo() {
 
     }
 
-    if (document.getElementsByClassName(`wrapper--8b249`).length > 0) {
+    if (document.getElementsByClassName(`wrapper--59090`).length > 0) {
         await apostar();
     }
 
@@ -1257,9 +1275,9 @@ setInterval(async () => {
 
         fecharTutorial();
 
-        if (document.getElementsByClassName(`roundingBoth--2a8e7 buttonContent--2a2d4 sm--a5b0b`)[3] != undefined) {
-            await click(document.getElementsByClassName(`roundingBoth--2a8e7 buttonContent--2a2d4 sm--a5b0b`)[3]);
-        }
+        // if (document.getElementsByClassName(`roundingBoth--2a8e7 buttonContent--2a2d4 sm--a5b0b`)[3] != undefined) {
+        //     await click(document.getElementsByClassName(`roundingBoth--2a8e7 buttonContent--2a2d4 sm--a5b0b`)[3]);
+        // }
 
         if (load == 0) {
             await carregarConfiguracao();
